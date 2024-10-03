@@ -3,17 +3,17 @@
 
 #include "Enemy.h"
 
+class SpecialEnemy : public Enemy {
+protected:
+  float EnemySpeed;
+  int directon;
+  float descendAmount;
+  unsigned int pointValue;
 
-class SpecialEnemy : protected Enemy {
-    protected:
-        float EnemySpeed; 
-        int directon; 
-        float descendAmount; 
-        unsigned int pointValue;
-    public:
-        override void move(); 
-        override void shoot(); 
-        void dropPowerUp(); 
+public:
+  void move();
+  void shoot() override;
+  void dropPowerUp();
 };
 
 #endif
