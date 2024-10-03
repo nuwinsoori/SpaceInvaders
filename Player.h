@@ -9,18 +9,19 @@ protected:
   unsigned int lives;
   unsigned int playerSpeed;
   unsigned int score;
-  unsigned int fireRate;
+  float fireRate;
   bool shield;
   bool triple;
   bool rapid;
 
 public:
-  void moveLeft();
-  void moveRight();
+  Player();
+  void moveLeft(sf::Time deltaTime);
+  void moveRight(sf::Time deltaTime);
   void shoot() override;
-  unsigned int loseLife();
+  void loseLife();
   bool isAlive();
-  unsigned int setSpeed(float newSpeed);
+  void setSpeed(float newSpeed);
   bool getShieldActive();
   bool getTripleActive();
   bool getRapidActive();

@@ -1,5 +1,5 @@
 spaceInvaders.o: *.cpp
-	g++ -Wall -std=c++11 *.cpp -o spaceInvaders.o -lsfml-graphics -lsfml-window -lsfml-system
+	g++ -Wall -std=c++11 *.cpp -o spaceInvaders.o -lsfml-graphics -lsfml-window -lsfml-system; ./spaceInvaders.o
 
 clean:
 	rm -f spaceInvaders.o
