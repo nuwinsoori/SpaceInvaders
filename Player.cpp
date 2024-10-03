@@ -1,5 +1,5 @@
-#include "Player.h"
-#include "Entity.h"
+#include "./Headers/Player.h"
+#include "/Headers/Entity.h"
 #include <SFML/Graphics.hpp>
 
 Player::Player()
