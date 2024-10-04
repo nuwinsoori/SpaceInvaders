@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include "./Headers/Entity.h"
 #include <SFML/Graphics.hpp>
 
 sf::FloatRect Entity::getDimensions() { return sprite.getGlobalBounds(); }

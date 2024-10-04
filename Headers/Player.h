@@ -6,7 +6,7 @@
 
 class Player : public Entity {
 protected:
-  unsigned int lives;
+  int lives;
   unsigned int playerSpeed;
   unsigned int score;
   float fireRate;
@@ -20,6 +20,7 @@ public:
   void moveRight(sf::Time deltaTime);
   void shoot() override;
   void loseLife();
+  void updateSprite();
   bool isAlive();
   void setSpeed(float newSpeed);
   bool getShieldActive();
