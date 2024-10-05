@@ -1,9 +1,15 @@
 #include "Headers/Player.h"
+#include "Headers/Enemy.h"
 #include <SFML/Graphics.hpp>
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(1200, 800), "Space Invaders");
+  //define dimentions
+  float screenWidth = 1200.0f;
+  float screenHeight = 800.0f;
+
+  sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Space Invaders");
   Player player;
+  Enemy enemy; 
   sf::Clock clock;
   while (window.isOpen()) {
     sf::Event event;
@@ -20,8 +26,13 @@ int main() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
       player.moveRight(deltaTime);
     }
+
+    //movement ofr enemy
+    enemy.move(deltaTime, 50.0f, screenWidth); 
+
     window.clear();
     player.draw(window);
+    enemy.draw(window);
     window.display();
   }
 

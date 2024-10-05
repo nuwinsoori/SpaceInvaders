@@ -11,7 +11,8 @@ protected:
   unsigned int pointValue;
 
 public:
-  void move();
+  Enemy();
+  void move(sf::Time deltaTime, float EnemySpeed, float screenWidth);
   void descent();
   void changeDirection();
   bool reachedEndOfScreen();
