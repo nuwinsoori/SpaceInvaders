@@ -7,6 +7,7 @@ int main() {
   float screenWidth = 1200.0f;
   float screenHeight = 800.0f;
 
+  //rendering window
   sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Space Invaders");
   Player player;
   Enemy enemy; 
@@ -28,8 +29,9 @@ int main() {
     }
 
     //movement ofr enemy
-    enemy.move(deltaTime, 50.0f, screenWidth); 
+    enemy.move(deltaTime, screenWidth); 
 
+    //drawing enetitys
     window.clear();
     player.draw(window);
     enemy.draw(window);

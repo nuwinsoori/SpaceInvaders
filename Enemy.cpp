@@ -6,7 +6,7 @@ using namespace std;
 using namespace sf; 
 
 //constructor defines all varibles.
-Enemy::Enemy(){
+Enemy::Enemy() : EnemySpeed(60.0f), descendAmount(50.0f), pointValue(10), directon(1) {
     setPosition(10.f, 50.f);
     if (!texture.loadFromFile("./Sprites/1163.png")) {
     cout << "Error loading enemy texture." << endl;
@@ -17,16 +17,23 @@ Enemy::Enemy(){
 
 
 //function that make enemies move
-void Enemy::move(sf::Time deltaTime, float EnemySpeed, float screenWidth){
-    sprite.move(EnemySpeed * deltaTime.asSeconds(), 0);
+void Enemy::move(sf::Time deltaTime, float screenWidth){
+    //moves enemy
+    sprite.move(EnemySpeed * directon * deltaTime.asSeconds(), 0);
 
-    // sf::FloatRect boundary = getDimensions();
-    if(sprite.getPosition().x > screenWidth){
-        sprite.setPosition(0, sprite.getPosition().y);
+    //moves enemy across screen or down
+    if(sprite.getPosition().x + sprite.getGlobalBounds().width >= screenWidth){
+        sprite.move(0, descendAmount);
+        directon = -1;
+    
+    } else if (sprite.getPosition().x <= 0) {
+        sprite.move(0, descendAmount);
+        directon = 1;
     }
+
 }
 
-//functiion that makes enemies go down once move all way left or right.
+//function that makes enemies go down once move all way left or right.
 void Enemy::descent(){
 
 }
