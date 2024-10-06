@@ -1,16 +1,17 @@
-#include "Headers/Player.h"
 #include "Headers/Enemy.h"
+#include "Headers/GameManager.h"
+#include "Headers/Global.h"
+#include "Headers/Player.h"
 #include <SFML/Graphics.hpp>
 
 int main() {
-  //define dimentions
-  float screenWidth = 1200.0f;
-  float screenHeight = 800.0f;
 
-  //rendering window
-  sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Space Invaders");
+  // rendering window
+  sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT),
+                          "Space Invaders");
   Player player;
-  Enemy enemy; 
+  Enemy enemy;
+  GameManager gameManager;
   sf::Clock clock;
   while (window.isOpen()) {
     sf::Event event;
@@ -20,21 +21,12 @@ int main() {
     }
     sf::Time deltaTime = clock.restart();
 
-    // player2 movement
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-      player.moveLeft(deltaTime);
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-      player.moveRight(deltaTime);
-    }
+    // update everything (player, enemy, bullets)
+    gameManager.update(deltaTime);
 
-    //movement ofr enemy
-    enemy.move(deltaTime, screenWidth); 
-
-    //drawing enetitys
+    // drawing
     window.clear();
-    player.draw(window);
-    enemy.draw(window);
+    gameManager.draw(window);
     window.display();
   }
 

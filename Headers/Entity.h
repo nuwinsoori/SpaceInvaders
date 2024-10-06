@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <iostream>
 
 using namespace std;
@@ -19,6 +20,7 @@ protected:
 
 public:
   sf::FloatRect getDimensions();
+  sf::Vector2f getPosition();
   void setPosition(float x, float y);
   bool checkCollision(Entity obj);
   virtual void shoot();

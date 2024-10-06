@@ -8,6 +8,8 @@ bool Entity::checkCollision(Entity obj) {
   }
   return false;
 }
+
+sf::Vector2f Entity::getPosition() { return sprite.getPosition(); }
 void Entity::shoot() { std::cout << ("This should get overridden"); }
 void Entity::setPosition(float x, float y) { sprite.setPosition(x, y); }
 void Entity::draw(sf::RenderWindow &window) { window.draw(sprite); }

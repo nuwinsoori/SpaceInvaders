@@ -1,30 +1,30 @@
 #include "./Headers/Player.h"
+#include "./Headers/Global.h"
 #include "Headers/Entity.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <string.h>
 
 Player::Player()
-    : lives(3), playerSpeed(300.f), score(0), fireRate(0.75f), shield(false),
-      triple(false), rapid(false) {
-  setPosition(600.0f, 715.0f);
-  if (!texture.loadFromFile("./sprites/player.png")) {
+    : lives(3), playerSpeed(PLAYER_SPEED), score(0), fireRate(PLAYER_FIRE_RATE),
+      shield(false), triple(false), rapid(false) {
+  sprite.setPosition(STARTING_X, STARTING_Y);
+  if (!texture.loadFromFile("./Sprites/player.png")) {
     std::cout << "Error loading player texture!" << std::endl;
   }
   sprite.setTexture(texture); // Set texture to sprite
 }
 
-void Player::moveLeft(sf::Time deltaTime) {
+void Player::update(sf::Time deltaTime) {
   sf::FloatRect boundary = getDimensions();
-  if (boundary.left > 0) {
-    sprite.move(-(playerSpeed * deltaTime.asSeconds()), 0.0f);
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+    if (boundary.left > 0) {
+      sprite.move(-(playerSpeed * deltaTime.asSeconds()), 0.0f);
+    }
   }
-}
-
-void Player::moveRight(sf::Time deltaTime) {
-  sf::FloatRect boundary = getDimensions();
-  if (boundary.left + boundary.width < 1200) {
-    sprite.move(playerSpeed * deltaTime.asSeconds(), 0.0f);
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+    if (boundary.left + boundary.width < 1200) {
+      sprite.move(playerSpeed * deltaTime.asSeconds(), 0.0f);
+    }
   }
 }
 
@@ -34,7 +34,7 @@ void Player::shoot() {}
 void Player::loseLife() {
   lives -= 1;
   if (!isAlive()) {
-    // gameover
+    // TODO:: Add gameover
   } else {
     std::cout << lives << std::endl; // DEUGGING
     updateSprite();
@@ -59,6 +59,8 @@ void Player::updateSprite() {
   }
   sprite.setTexture(texture); // set texture to new sprite
 }
+
+float Player::getTop() { return sprite.getGlobalBounds().top; };
 
 bool Player::isAlive() {
   if (lives > 0) {
