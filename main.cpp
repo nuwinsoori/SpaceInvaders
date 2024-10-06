@@ -9,6 +9,7 @@ int main() {
   // rendering window
   sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT),
                           "Space Invaders");
+  window.setFramerateLimit(FRAME_RATE);
   Player player;
   Enemy enemy;
   GameManager gameManager;

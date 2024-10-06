@@ -51,14 +51,19 @@ void GameManager::handlePlayerShooting() {
 }
 
 void GameManager::handleEnemyShooting() {
-  for (auto &enemy : enemies) {
-    float randomChance = static_cast<float>(rand()) /
-                         RAND_MAX; // returns a float between 0 and 1
-    // TODO: enemies not shooting
-    if (randomChance <= 0.0155) { // 1.55% chance of shooting per frame
-      bullets.push_back(
-          Bullet(enemy.getPosition().x, enemy.getPosition().y,
-                 BULLET_VELOCITY)); // Enemy's bullets go downwards
-    }
-  }
+  // TODO:: SHOULD BE CHANGED TO THIS WHEN ENEMIES IN VECTOR
+  // for (auto &enemy : enemies) {
+  //   float randomChance = static_cast<float>(rand()) /
+  //                        RAND_MAX; // returns a float between 0 and 1
+  //   if (randomChance <= 0.0155) { // 1.55% chance of shooting per frame
+  //     bullets.push_back(
+  //         Bullet(enemy.getPosition().x, enemy.getPosition().y,
+  //                BULLET_VELOCITY)); // Enemy's bullets go downwards
+  //   }
+  // }
+  float randomChance =
+      static_cast<float>(rand()) / RAND_MAX; // returns a float between 0 and 1
+  if (randomChance <= (0.003))               // 0.03% chance per frame
+    bullets.push_back(Bullet(enemy.getPosition().x, enemy.getPosition().y,
+                             BULLET_VELOCITY)); // Enemy's bullets go downwards
 }

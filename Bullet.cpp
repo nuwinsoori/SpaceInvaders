@@ -3,7 +3,7 @@
 #include <iostream>
 
 Bullet::Bullet(float startX, float startY, float velocity)
-    : velocity(BULLET_VELOCITY) {
+    : velocity(velocity) {
   setPosition(startX, startY);
   if (!texture.loadFromFile("./Sprites/bullet.png")) {
     std::cout << "Error loading bullet texture!" << std::endl;
@@ -13,7 +13,7 @@ Bullet::Bullet(float startX, float startY, float velocity)
 
 void Bullet::update(sf::Time deltaTime) {
   // Move the bullet along y-axis
-  sprite.move(0, -velocity * deltaTime.asSeconds());
+  sprite.move(0, velocity * deltaTime.asSeconds());
 }
 
 bool Bullet::isOffScreen() {
