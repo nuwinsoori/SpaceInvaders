@@ -8,8 +8,8 @@ private:
   float velocity;
 
 public:
-  Bullet(float startX, float startY, float velocity,
-         const sf::Texture &texture);
+  Bullet(float startX, float startY, float velocity, const sf::Texture &texture,
+         bool rotate);
   void update(sf::Time deltaTime);
   bool isOffScreen();
 };

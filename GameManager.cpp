@@ -87,9 +87,14 @@ void GameManager::handlePlayerShooting() {
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
     if (playerReloadTime.getElapsedTime().asSeconds() >= PLAYER_FIRE_RATE) {
 
-      bullets.push_back(
-          Bullet(player.getPosition().x + (player.getDimensions().width / 2),
-                 690.0f, -BULLET_VELOCITY, bulletTexture));
+      // Get the player position and dimensions
+      float playerCenterX =
+          player.getPosition().x + (player.getDimensions().width / 2);
+      float bulletWidth = bulletTexture.getSize().x;
+
+      // Adjust bullet position to shoot from the center
+      bullets.push_back(Bullet(playerCenterX - (bulletWidth / 2), 690.0f,
+                               -BULLET_VELOCITY, bulletTexture, false));
 
       playerReloadTime.restart();
     }
@@ -100,10 +105,13 @@ void GameManager::handleEnemyShooting() {
   for (auto &enemy : enemies) {
     float randomChance = static_cast<float>(rand()) /
                          RAND_MAX; // returns a float between 0 and 1
+    float enemyCenterX =
+        enemy.getPosition().x + (enemy.getDimensions().width / 2);
+    float bulletWidth = bulletTexture.getSize().x;
     if (randomChance <=
         0.0002) { // 0.002 chance shooting per frame (120fps), per enemy
       bullets.push_back(Bullet(enemy.getPosition().x, enemy.getPosition().y,
-                               BULLET_VELOCITY, bulletTexture));
+                               BULLET_VELOCITY, bulletTexture, true));
     }
   }
 }

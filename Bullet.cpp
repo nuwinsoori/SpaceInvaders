@@ -3,10 +3,14 @@
 #include <iostream>
 
 Bullet::Bullet(float startX, float startY, float velocity,
-               const sf::Texture &texture)
+               const sf::Texture &texture, bool rotate)
     : velocity(velocity) { // Store the texture reference
   setPosition(startX, startY);
   sprite.setTexture(texture); // Set the texture
+
+  if (rotate) {
+    sprite.rotate(180);
+  }
 }
 
 void Bullet::update(sf::Time deltaTime) {
