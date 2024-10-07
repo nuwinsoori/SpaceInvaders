@@ -4,32 +4,64 @@
 #include "Headers/Global.h"
 #include "Headers/Player.h"
 
-void GameManager::update(sf::Time deltaTime) {
-  // Update player and enemy positions, handle bullet movement
-  player.update(deltaTime);
-  enemy.move(deltaTime);
-  handlePlayerShooting();
-  handleEnemyShooting();
 
-  // iterates all bullets in vector
-  for (auto &bullet : bullets) {
-    bullet.update(deltaTime);
+GameManager::GameManager() : currentState(Playing), enemy(ENEMYSTARTX, ENEMYSTARTY) { 
+  srand(static_cast<unsigned>(time(0))); 
+  initializeEnemies();
+}
+
+void GameManager::update(sf::Time deltaTime) {
+  if (currentState == Playing) {
+    // Update player and enemy positions, handle bullet movement
+    player.update(deltaTime);
+    enemy.move(deltaTime);
+    handlePlayerShooting();
+    handleEnemyShooting();
+
+    // iterates all bullets in vector
+    for (auto &bullet : bullets) {
+      bullet.update(deltaTime);
+    }
+
+    // delete bullets that are out of frame
+    for (unsigned int i = 0; i < bullets.size();) {
+      if (bullets[i].isOffScreen()) {
+        bullets.erase(bullets.begin() + i);
+      } else {
+        i++; // only increase i if object not removed
+      }
+    }
+
+  } else if (currentState == GameOver) {
+    // add gameover message and play again button. 
+    // by implementing the restartGame function.
   }
 
-  // delete bullets that are out of frame
-  for (unsigned int i = 0; i < bullets.size();) {
-    if (bullets[i].isOffScreen()) {
-      bullets.erase(bullets.begin() + i);
-    } else {
-      i++; // only increase i if object not removed
+}
+
+void GameManager::initializeEnemies(){
+  enemies.clear(); 
+
+  for(int row = 0; row < ENEMYROW; row++) {
+    for(int col = 0; col < ENEMYCOL; col++) {
+
+      float EnemyPosX = ENEMYSTARTX + col * ENEMYSPACINGX;
+      float EnemyPosY = ENEMYSTARTY + row * ENEMYSPACINGY; 
+
+      Enemy enemy(EnemyPosX, EnemyPosY);
+
+      enemies.push_back(enemy); 
     }
   }
 }
 
+
 void GameManager::draw(sf::RenderWindow &window) {
   player.draw(window);
   // TODO:: there will be more enemies so will need to draw all in vector
-  enemy.draw(window);
+  for(auto &enemy : enemies) {
+    enemy.draw(window);
+  }
   // Draw each bullet
   for (auto &bullet : bullets) {
     bullet.draw(window);
@@ -66,4 +98,20 @@ void GameManager::handleEnemyShooting() {
   if (randomChance <= (0.003))               // 0.03% chance per frame
     bullets.push_back(Bullet(enemy.getPosition().x, enemy.getPosition().y,
                              BULLET_VELOCITY)); // Enemy's bullets go downwards
+}
+
+void GameManager::checkGameOver() {
+  if(player.getPlayerLives() <= 0 ){
+    currentState = GameOver; 
+  } 
+  // add if enemies reach certian position 
+}
+
+void GameManager::restartGame(){
+  player.setPlayerLives(3);
+  currentState = Playing; 
+}
+
+GameManager::GameState GameManager::getCurrentState(){
+  return currentState;
 }

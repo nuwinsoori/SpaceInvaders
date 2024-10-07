@@ -82,3 +82,11 @@ void Player::setShieldActive() {}
 void Player::setTripleActive() {}
 
 void Player::setRapidActive() {}
+
+void Player::setPlayerLives(int lives){
+  this->lives=lives;
+}
+
+int Player::getPlayerLives(){
+  return lives; 
+}

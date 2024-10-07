@@ -23,6 +23,8 @@ public:
   void moveRight(sf::Time deltaTime);
   void shoot() override;
   void loseLife();
+  void setPlayerLives(int lives);
+  int getPlayerLives();
   void updateSprite();
   bool isAlive();
   void setSpeed(float newSpeed);

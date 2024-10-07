@@ -11,5 +11,12 @@ const float PLAYER_FIRE_RATE = 0.75;
 const float BULLET_VELOCITY = 300.0f;
 const float SCREEN_WIDTH = 1200.0f;
 const float SCREEN_HEIGHT = 800.0f;
+const float ENEMY_LIMIT = 500.0f;
+const int ENEMYROW = 5; 
+const int ENEMYCOL = 10; 
+const float ENEMYSTARTX = 10.f;
+const float ENEMYSTARTY = 50.f;
+const float ENEMYSPACINGX = 20.0f;
+const float ENEMYSPACINGY = 20.0f;
 
 #endif

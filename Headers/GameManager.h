@@ -11,20 +11,30 @@
 #include "Player.h"
 
 class GameManager {
+public:
+   enum GameState {
+    Playing,
+    GameOver
+  };
+
 protected:
   std::vector<Enemy> enemies;
   std::vector<Bullet> bullets;
   Player player;
   Enemy enemy;
   sf::Clock playerReloadTime;
-
+  GameState currentState; 
+ 
 public:
-  GameManager() { srand(static_cast<unsigned>(time(0))); }
+  GameManager();
   void newLevel();
   void checkCollisions();
-  void gameOver();
+  void initializeEnemies();
   void update(sf::Time deltaTime);
   void draw(sf::RenderWindow &window);
+  void checkGameOver();
+  void restartGame();
+  GameState getCurrentState(); 
 
   void handleEnemyShooting();
   void handlePlayerShooting();

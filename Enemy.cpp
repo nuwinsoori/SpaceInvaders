@@ -7,15 +7,17 @@ using namespace std;
 using namespace sf;
 
 // constructor defines all varibles.
-Enemy::Enemy()
+Enemy::Enemy(float PosX, float PosY)
     : EnemySpeed(60.0f), descendAmount(50.0f), pointValue(10), directon(1) {
-  setPosition(10.f, 50.f);
-  if (!texture.loadFromFile("./Sprites/1163.png")) {
-    cout << "Error loading enemy texture." << endl;
-  }
-  sprite.setTexture(texture);
-  sprite.scale(0.25f, 0.25f);
-}
+        setPosition(PosX, PosY);
+        if (!texture.loadFromFile("./Sprites/1163.png")) {
+            cout << "Error loading enemy texture." << endl;
+        }
+        sprite.setTexture(texture);
+        sprite.scale(0.25f, 0.25f);
+    }
+
+
 
 // function that make enemies move
 void Enemy::move(sf::Time deltaTime) {
@@ -31,6 +33,11 @@ void Enemy::move(sf::Time deltaTime) {
     sprite.move(0, descendAmount);
     directon = 1;
   }
+
+  //if enemy reaches certian place, game over 
+//   if (sprite.getPosition().x == ENEMY_LIMIT){
+//     gameover(); 
+//   }
 }
 
 // function that makes enemies go down once move all way left or right.
