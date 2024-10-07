@@ -11,7 +11,6 @@ int main() {
   window.setFramerateLimit(FRAME_RATE);
   Player player;
   GameManager gameManager;
-  gameManager.loadAssets();
   sf::Clock clock;
   while (window.isOpen()) {
     sf::Event event;

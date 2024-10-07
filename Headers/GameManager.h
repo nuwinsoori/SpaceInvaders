@@ -22,6 +22,7 @@ protected:
   sf::Clock playerReloadTime;
   GameState currentState;
   sf::Texture bulletTexture;
+  sf::Texture enemyTexture;
 
 public:
   GameManager();

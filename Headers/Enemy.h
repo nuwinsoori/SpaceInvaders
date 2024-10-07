@@ -13,8 +13,8 @@ protected:
   unsigned int pointValue;
 
 public:
-  Enemy(); 
-  Enemy(float PosX, float PosY);
+  Enemy();
+  Enemy(float PosX, float PosY, const sf::Texture &texture);
   void move(sf::Time deltaTime);
   void descent();
   void changeDirection();
