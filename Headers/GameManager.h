@@ -12,10 +12,7 @@
 
 class GameManager {
 public:
-   enum GameState {
-    Playing,
-    GameOver
-  };
+  enum GameState { Playing, GameOver };
 
 protected:
   std::vector<Enemy> enemies;
@@ -23,10 +20,12 @@ protected:
   Player player;
   Enemy enemy;
   sf::Clock playerReloadTime;
-  GameState currentState; 
- 
+  GameState currentState;
+  sf::Texture bulletTexture;
+
 public:
   GameManager();
+  bool loadAssets();
   void newLevel();
   void checkCollisions();
   void initializeEnemies();
@@ -34,7 +33,7 @@ public:
   void draw(sf::RenderWindow &window);
   void checkGameOver();
   void restartGame();
-  GameState getCurrentState(); 
+  GameState getCurrentState();
 
   void handleEnemyShooting();
   void handlePlayerShooting();

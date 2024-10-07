@@ -8,7 +8,8 @@ private:
   float velocity;
 
 public:
-  Bullet(float startX, float startY, float velocity);
+  Bullet(float startX, float startY, float velocity,
+         const sf::Texture &texture);
   void update(sf::Time deltaTime);
   bool isOffScreen();
 };

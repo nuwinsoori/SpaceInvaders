@@ -2,13 +2,11 @@
 #include "Headers/Global.h"
 #include <iostream>
 
-Bullet::Bullet(float startX, float startY, float velocity)
-    : velocity(velocity) {
+Bullet::Bullet(float startX, float startY, float velocity,
+               const sf::Texture &texture)
+    : velocity(velocity) { // Store the texture reference
   setPosition(startX, startY);
-  if (!texture.loadFromFile("./Sprites/bullet.png")) {
-    std::cout << "Error loading bullet texture!" << std::endl;
-  }
-  sprite.setTexture(texture);
+  sprite.setTexture(texture); // Set the texture
 }
 
 void Bullet::update(sf::Time deltaTime) {

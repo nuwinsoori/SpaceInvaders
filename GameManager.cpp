@@ -10,6 +10,14 @@ GameManager::GameManager()
   initializeEnemies();
 }
 
+bool GameManager::loadAssets() {
+  if (!bulletTexture.loadFromFile("./Sprites/bullet.png")) {
+    std::cout << "Error loading bullet texture!" << std::endl;
+    return false;
+  }
+  return true;
+}
+
 void GameManager::update(sf::Time deltaTime) {
   if (currentState == Playing) {
     // Update player and enemy positions, handle bullet movement
@@ -71,13 +79,13 @@ void GameManager::draw(sf::RenderWindow &window) {
 
 void GameManager::handlePlayerShooting() {
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-    if (playerReloadTime.getElapsedTime().asSeconds() >=
-        PLAYER_FIRE_RATE) { // To avoid constant shooting, has cooldown
+    if (playerReloadTime.getElapsedTime().asSeconds() >= PLAYER_FIRE_RATE) {
 
-      // adds bullet object at end of vector
-      bullets.push_back(Bullet(
-          player.getPosition().x + (player.getDimensions().width / 2), 690.0f,
-          -BULLET_VELOCITY)); // Player's bullets go upwards
+      bullets.push_back(
+          Bullet(player.getPosition().x + (player.getDimensions().width / 2),
+                 690.0f, -BULLET_VELOCITY,
+                 bulletTexture)); // Pass the texture by reference
+
       playerReloadTime.restart();
     }
   }
@@ -89,9 +97,9 @@ void GameManager::handleEnemyShooting() {
     float randomChance = static_cast<float>(rand()) /
                          RAND_MAX;  // returns a float between 0 and 1
     if (randomChance <= 0.000155) { // 1.55% chance of shooting per frame
-      bullets.push_back(
-          Bullet(enemy.getPosition().x, enemy.getPosition().y,
-                 BULLET_VELOCITY)); // Enemy's bullets go downwards
+      bullets.push_back(Bullet(enemy.getPosition().x, enemy.getPosition().y,
+                               BULLET_VELOCITY,
+                               bulletTexture)); // Enemy's bullets go downwards
     }
   }
 }
