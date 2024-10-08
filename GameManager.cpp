@@ -36,9 +36,25 @@ void GameManager::update(sf::Time deltaTime) {
       bullet.update(deltaTime);
     }
 
+    bool EnemyDirectionChange = false;
+
     // iterates all enemies in vector
     for (auto &enemy : enemies) {
       enemy.move(deltaTime);
+
+      if(enemy.getGlobalBounds().width >= SCREEN_WIDTH) {
+        EnemyDirectionChange = true; 
+      }
+
+      if(EnemyDirectionChange == true) {
+        for (int row = 0; row < ENEMYROW; row++) {
+          for(int col = 0; col < ENEMYCOL; col++) {
+          enemies.changeDirection();
+          enemies.descent();
+          }
+        
+        EnemyDirectionChange = false; 
+      }
     }
 
     // delete bullets that are out of frame

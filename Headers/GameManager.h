@@ -23,6 +23,7 @@ protected:
   GameState currentState;
   sf::Texture bulletTexture;
   sf::Texture enemyTexture;
+  bool EnemyDirectionChange; 
 
 public:
   GameManager();
