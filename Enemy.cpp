@@ -27,6 +27,7 @@ void Enemy::move(sf::Time deltaTime) {
   } else if (sprite.getPosition().x <= 0) {
     sprite.move(0, descendAmount);
     directon = 1;
+    
   }
 
   // if enemy reaches certian place, game over
