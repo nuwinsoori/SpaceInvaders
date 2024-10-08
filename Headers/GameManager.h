@@ -15,7 +15,6 @@ public:
   enum GameState { Playing, GameOver };
 
 protected:
-  std::vector<Enemy> enemies;
   std::vector<Bullet> bullets;
   Player player;
   Enemy enemy;
@@ -23,6 +22,7 @@ protected:
   GameState currentState;
   sf::Texture bulletTexture;
   sf::Texture enemyTexture;
+  bool EnemyDirectionChange; 
 
 public:
   GameManager();

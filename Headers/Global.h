@@ -16,7 +16,7 @@ const int ENEMYROW = 5;
 const int ENEMYCOL = 10;
 const float ENEMYSTARTX = 10.f;
 const float ENEMYSTARTY = 50.f;
-const float ENEMYSPACINGX = 20.0f;
-const float ENEMYSPACINGY = 20.0f;
+const float ENEMYSPACINGX = 90.0f;
+const float ENEMYSPACINGY = 50.0f;
 
 #endif

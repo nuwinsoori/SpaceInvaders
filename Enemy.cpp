@@ -27,7 +27,7 @@ void Enemy::move(sf::Time deltaTime) {
   } else if (sprite.getPosition().x <= 0) {
     sprite.move(0, descendAmount);
     directon = 1;
-    
+
   }
 
   // if enemy reaches certian place, game over
@@ -35,6 +35,8 @@ void Enemy::move(sf::Time deltaTime) {
   //     gameover();
   //   }
 }
+
+
 
 // function that makes enemies go down once move all way left or right.
 void Enemy::descent() {}
@@ -44,3 +46,26 @@ void Enemy::changeDirection() {}
 
 // function that checks if enemies have reached end of screen.
 bool Enemy::reachedEndOfScreen() {}
+
+void Enemy::update(sf::Time deltaTime) {
+      // iterates all enemies in vector
+    for (auto &enemy : enemies) {
+      enemy.move(deltaTime);
+    }
+}
+
+void Enemy::initializeEnemies() {
+  enemies.clear();
+
+  for (int row = 0; row < ENEMYROW; row++) {
+    for (int col = 0; col < ENEMYCOL; col++) {
+
+      float EnemyPosX = ENEMYSTARTX + col * ENEMYSPACINGX;
+      float EnemyPosY = ENEMYSTARTY + row * ENEMYSPACINGY;
+
+      Enemy enemy(EnemyPosX, EnemyPosY, enemyTexture);
+
+      enemies.push_back(enemy);
+    }
+  }
+}

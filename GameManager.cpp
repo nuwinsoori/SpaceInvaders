@@ -36,11 +36,6 @@ void GameManager::update(sf::Time deltaTime) {
       bullet.update(deltaTime);
     }
 
-    // iterates all enemies in vector
-    for (auto &enemy : enemies) {
-      enemy.move(deltaTime);
-    }
-
     // delete bullets that are out of frame
     for (unsigned int i = 0; i < bullets.size();) {
       if (bullets[i].isOffScreen()) {
@@ -56,27 +51,9 @@ void GameManager::update(sf::Time deltaTime) {
   }
 }
 
-void GameManager::initializeEnemies() {
-  enemies.clear();
-
-  for (int row = 0; row < ENEMYROW; row++) {
-    for (int col = 0; col < ENEMYCOL; col++) {
-
-      float EnemyPosX = ENEMYSTARTX + col * ENEMYSPACINGX;
-      float EnemyPosY = ENEMYSTARTY + row * ENEMYSPACINGY;
-
-      Enemy enemy(EnemyPosX, EnemyPosY, enemyTexture);
-
-      enemies.push_back(enemy);
-    }
-  }
-}
-
 void GameManager::draw(sf::RenderWindow &window) {
   player.draw(window);
-  for (auto &enemy : enemies) {
-    enemy.draw(window);
-  }
+  
   // Draw each bullet
   for (auto &bullet : bullets) {
     bullet.draw(window);

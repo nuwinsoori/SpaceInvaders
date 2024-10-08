@@ -11,6 +11,7 @@ protected:
   int directon;
   float descendAmount;
   unsigned int pointValue;
+  std::vector<Enemy> enemies;
 
 public:
   Enemy();
@@ -19,6 +20,9 @@ public:
   void descent();
   void changeDirection();
   bool reachedEndOfScreen();
+  void update(sf::Time deltaTime); 
+  void initializeEnemies();
+  void draw(sf::RenderWindow &window); 
 };
 
 #endif
