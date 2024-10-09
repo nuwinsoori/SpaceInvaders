@@ -24,12 +24,14 @@ bool Bullet::offScreen(sf::RenderWindow *window) {
   return (bulletBounds.top + bulletBounds.height < 0 ||
           bulletBounds.top > SCREEN_HEIGHT);
 }
+
 Bullet::~Bullet() {
   delete this->sprite;
   delete this->texture;
   this->texture = nullptr;
   this->sprite = nullptr;
 }
+
 void Bullet::update(sf::Time deltaTime) {
   sprite->move(0, velocity * deltaTime.asSeconds());
 }

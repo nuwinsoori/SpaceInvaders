@@ -20,12 +20,18 @@ void Enemy::move(sf::Time deltaTime) {
       descent();
       changeDirection();
     }
+
     for (auto &enemy : enemies) {
       enemy->sprite->move(
           ENEMY_SPEED * enemy->direction * deltaTime.asSeconds(), 0);
     }
     enemyMoveTime.restart();
   }
+
+  for(auto &bullet : bullets) {
+    bullet->update(deltaTime);
+  }
+
 }
 
 bool Enemy::willReachEndOfScreen(sf::Time deltaTime) {
@@ -78,7 +84,25 @@ void Enemy::initializeEnemies() {
       enemies.push_back(enemy);
     }
   }
+
 }
+
 void Enemy::draw(sf::RenderWindow &window) { window.draw(*sprite); }
-void Enemy::shoot() {} // Handles shooting
-void Enemy::die() {}
+
+void Enemy::shoot() {
+  for(auto &enemy : enemies) {
+    float randomChance = static_cast<float>(rand())/RAND_MAX;
+
+    sf::Vector2f shootingPos; 
+    shootingPos.x = enemy->sprite->getPosition().x; 
+    shootingPos.y = enemy->sprite->getPosition().y;
+
+    if(randomChance < 0.002) {
+      Bullet *bullet = new Bullet(shootingPos, true);
+      bullets.push_back(bullet);
+    }
+  }
+
+} // Handles shooting
+
+void Enemy::die() {} // handles if enemy dies

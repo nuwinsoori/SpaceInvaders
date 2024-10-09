@@ -25,6 +25,8 @@ public:
   void draw(sf::RenderWindow &window) override;
   void shoot() override; // Handles shooting
   void die();
+  sf::Vector2f shootPos(); 
+
 };
 
 #endif

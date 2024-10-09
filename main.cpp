@@ -19,6 +19,7 @@ int main() {
     player.move(deltaTime);
     player.shoot();
     enemy.move(deltaTime);
+    enemy.shoot();
     // drawing
     window.clear();
     player.draw(window);
