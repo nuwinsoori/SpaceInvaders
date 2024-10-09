@@ -24,7 +24,7 @@ void Player::move(sf::Time deltaTime) {
     }
   }
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-    if (boundary.left + boundary.width < 1200) {
+    if (boundary.left + boundary.width < SCREEN_WIDTH) {
       sprite->move(playerSpeed * deltaTime.asSeconds(), 0.0f);
     }
   }
@@ -34,13 +34,21 @@ void Player::move(sf::Time deltaTime) {
   }
 }
 
+sf::Vector2f Player::getMiddleTop() {
+  sf::Vector2f center;
+  center.x =
+      (sprite->getGlobalBounds().left + (sprite->getGlobalBounds().width / 2));
+  center.y = sprite->getGlobalBounds().top;
+  return center;
+}
+
 // Shooting method
 void Player::shoot() {
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
       timeSinceShot >= PLAYER_FIRE_RATE) {
-    bullets *bullet = new Bullet(sprite->getPosition(), false);
+    Bullet *bullet = new Bullet(getMiddleTop(), false);
     bullets.push_back(bullet);
     playerReloadTime.restart();
   }
@@ -66,12 +74,13 @@ bool Player::isAlive() {
 
 // Update sprite method
 void Player::updateSprite() {
+  std::string newSprite;
   if (lives == 3) {
-    sprite = "./Sprites/player.png";
+    newSprite = "./Sprites/player.png";
   } else if (lives == 2) {
-    sprite = "./Sprites/player(2livesleft).png";
+    newSprite = "./Sprites/player(2livesleft).png";
   } else if (lives == 1) {
-    sprite = "./Sprites/player(1lifeleft).png";
+    newSprite = "./Sprites/player(1lifeleft).png";
   } else {
     std::cout << "ERROR: Should be dead" << std::endl;
     return;

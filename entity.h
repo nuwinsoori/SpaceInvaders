@@ -16,6 +16,7 @@ protected:
   bool alive;
   sf::Sprite *sprite;
   sf::Texture *texture;
+  float speed;
 
 public:
   virtual void shoot() = 0;

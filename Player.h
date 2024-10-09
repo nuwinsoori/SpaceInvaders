@@ -30,6 +30,7 @@ public:
   bool getShieldActive();         // Checks if shield is active
   bool getTripleActive();         // Checks if triple shot is active
   void shoot() override;          // Handles shooting
+  sf::Vector2f getMiddleTop();
   void draw(sf::RenderWindow &window) override;
   bool getRapidActive();  // Checks if rapid fire is active
   void setShieldActive(); // Activates shield
