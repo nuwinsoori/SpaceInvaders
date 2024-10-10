@@ -33,12 +33,14 @@ public:
   void shoot() override;          // Handles shooting
   void deleteBullet(int index);   // deletes out of bounds bullets
   void collision(Enemy &enemy);   // bullet collision check
+  void hit(Enemy &enemy);
   sf::Vector2f getMiddleTop();
   void draw(sf::RenderWindow &window) override;
   bool getRapidActive();  // Checks if rapid fire is active
   void setShieldActive(); // Activates shield
   void setTripleActive(); // Activates triple shot
   void setRapidActive();  // Activates rapid fire
+  sf::FloatRect getDimensions() { return sprite->getGlobalBounds(); }
 };
 
 #endif

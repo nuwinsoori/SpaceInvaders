@@ -84,6 +84,18 @@ void Player::collision(Enemy &enemy) {
   }
 }
 
+void Player::hit(Enemy &enemy) {
+  for (int i = 0; i < enemy.bullets.size();) {
+    Bullet *currentBullet = enemy.bullets.at(i);
+    if (currentBullet->getDimensions().intersects(getDimensions())) {
+      loseLife();
+      enemy.deleteBullet(i);
+    } else {
+      i++; // Only increment i if no deletion occurred
+    }
+  }
+}
+
 // Losing life method
 void Player::loseLife() {
   lives -= 1;

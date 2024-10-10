@@ -7,12 +7,12 @@
 class Enemy : public Entity {
 protected:
   unsigned int pointValue;
-  std::vector<Bullet *> bullets;
   float chanceToShoot;
   int direction;
   sf::Clock enemyMoveTime;
 
 public:
+  std::vector<Bullet *> bullets;
   std::vector<Enemy *> enemies;
   Enemy();
   ~Enemy();
@@ -27,6 +27,8 @@ public:
   void draw(sf::RenderWindow &window) override;
   void shoot() override; // Handles shooting
   void die();
+  void deleteBullet(int index);
+  void deleteOutOfBoundsBullets();
   int getEnemyCount();
   sf::FloatRect getDimensions();
 };

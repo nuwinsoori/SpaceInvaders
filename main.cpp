@@ -22,6 +22,7 @@ int main() {
     enemy.move(deltaTime);
     player.collision(enemy);
     enemy.shoot();
+    player.hit(enemy);
     // drawing
     window.clear();
     player.draw(window);

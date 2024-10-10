@@ -1,6 +1,7 @@
 
 #include "Enemy.h"
 #include "Global.h"
+#include "Player.h"
 
 Enemy::Enemy() { initializeEnemies(); }
 
@@ -38,6 +39,7 @@ void Enemy::move(sf::Time deltaTime) {
   for (auto &bullet : bullets) {
     bullet->update(deltaTime);
   }
+  deleteOutOfBoundsBullets();
 }
 
 bool Enemy::willReachEndOfScreen(sf::Time deltaTime) {
@@ -109,11 +111,27 @@ void Enemy::shoot() {
       bullets.push_back(bullet);
     }
   }
+}
 
-} // Handles shooting
-
+// TODO:: Make animation and for enemy death
 void Enemy::die() { std::cout << "Dead" << std::endl; } // handles if enemy dies
 
 int Enemy::getEnemyCount() { return enemies.size(); }
+
+void Enemy::deleteOutOfBoundsBullets() {
+  for (int i = 0; i < bullets.size(); i++) {
+    if (bullets.at(i)->offScreen()) {
+      deleteBullet(i);
+      i--;
+    }
+  }
+}
+
+void Enemy::deleteBullet(int index) {
+  if (index >= 0 && index < bullets.size()) {
+    delete bullets.at(index);
+    bullets.erase(bullets.begin() + index);
+  }
+}
 
 sf::FloatRect Enemy::getDimensions() { return sprite->getGlobalBounds(); }
