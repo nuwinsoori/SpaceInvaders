@@ -24,7 +24,7 @@ int main() {
     // drawing
     window.clear();
     player.draw(window);
-    enemy.draw(window);
+    enemy.drawAll(window);
     window.display();
   }
 
