@@ -12,6 +12,7 @@ Bullet::Bullet(sf::Vector2f position, bool rotate) {
   sprite->setPosition(position);
   sprite->setOrigin(sprite->getLocalBounds().width / 2,
                     sprite->getLocalBounds().height / 2);
+  sprite->setScale(0.5f, 0.5f);
   if (rotate == true) {
     // enemies rotate so inverse velocity and change rotation of bullet
     velocity = -BULLET_VELOCITY;
@@ -19,17 +20,17 @@ Bullet::Bullet(sf::Vector2f position, bool rotate) {
   }
 }
 
-bool Bullet::offScreen(sf::RenderWindow *window) {
-  sf::FloatRect bulletBounds = sprite->getGlobalBounds();
-  return (bulletBounds.top + bulletBounds.height < 0 ||
-          bulletBounds.top > SCREEN_HEIGHT);
-}
-
 Bullet::~Bullet() {
   delete this->sprite;
   delete this->texture;
   this->texture = nullptr;
   this->sprite = nullptr;
+}
+
+bool Bullet::offScreen() {
+  sf::FloatRect bulletBounds = sprite->getGlobalBounds();
+  return (bulletBounds.top + bulletBounds.height < 0 ||
+          bulletBounds.top > SCREEN_HEIGHT);
 }
 
 void Bullet::update(sf::Time deltaTime) {

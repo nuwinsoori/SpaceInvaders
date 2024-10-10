@@ -11,8 +11,8 @@ private:
 
 public:
   Bullet(sf::Vector2f position, bool rotate);
-  bool offScreen(sf::RenderWindow *window);
-  sf::FloatRect getRect() { return sprite->getGlobalBounds(); }
+  bool offScreen();
+  sf::FloatRect getDimensions() { return sprite->getGlobalBounds(); }
   ~Bullet();
   void update(sf::Time deltaTime);
   void draw(sf::RenderWindow &window);

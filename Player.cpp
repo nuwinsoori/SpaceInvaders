@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Enemy.h"
 #include "Global.h"
 #include "bullet.h"
 #include <SFML/Graphics/Sprite.hpp>
@@ -32,6 +33,9 @@ void Player::move(sf::Time deltaTime) {
   for (auto &bullet : bullets) {
     bullet->update(deltaTime);
   }
+  if (!bullets.empty() && bullets.at(0)->offScreen()) {
+    deleteBullet(0);
+  }
 }
 
 sf::Vector2f Player::getMiddleTop() {
@@ -51,6 +55,32 @@ void Player::shoot() {
     Bullet *bullet = new Bullet(getMiddleTop(), false);
     bullets.push_back(bullet);
     playerReloadTime.restart();
+  }
+}
+
+void Player::deleteBullet(int index) {
+  if (index >= 0 && index < bullets.size()) {
+    delete bullets.at(index);
+    bullets.erase(bullets.begin() + index);
+  }
+}
+
+void Player::collision(Enemy &enemy) {
+  for (int i = 0; i < bullets.size(); i++) {
+    Bullet *currentBullet = bullets.at(i); // Use the current bullet
+    for (int j = 0; j < enemy.getEnemyCount(); j++) {
+      Enemy *currentEnemy = enemy.enemies.at(j);
+      if (currentBullet && currentEnemy) { // ensure both are valid pointers
+        // Check for collision between the bullet and the current enemy
+        if (currentBullet->getDimensions().intersects(
+                currentEnemy->getDimensions())) {
+          currentEnemy->die();
+          deleteBullet(i);
+          i--;
+          break; // Exit the inner loop since the bullet is deleted
+        }
+      }
+    }
   }
 }
 

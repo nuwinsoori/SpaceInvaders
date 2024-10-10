@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "Enemy.h"
 #include "Global.h"
 #include "bullet.h"
 #include "entity.h"
@@ -14,11 +15,11 @@ protected:
   bool shield;
   bool triple;
   bool rapid;
-  std::vector<Bullet *> bullets;
   sf::Clock playerReloadTime;
 
 public:
-  Player();                       // Constructor
+  Player(); // Constructor
+  std::vector<Bullet *> bullets;
   void move(sf::Time deltaTime);  // Moves the player
   void setPlayerLives(int lives); // Sets player lives
   int getPlayerLives();           // Gets player lives
@@ -30,6 +31,8 @@ public:
   bool getShieldActive();         // Checks if shield is active
   bool getTripleActive();         // Checks if triple shot is active
   void shoot() override;          // Handles shooting
+  void deleteBullet(int index);   // deletes out of bounds bullets
+  void collision(Enemy &enemy);   // bullet collision check
   sf::Vector2f getMiddleTop();
   void draw(sf::RenderWindow &window) override;
   bool getRapidActive();  // Checks if rapid fire is active

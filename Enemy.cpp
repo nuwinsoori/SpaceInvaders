@@ -10,7 +10,14 @@ Enemy::Enemy(float PosX, float PosY) : pointValue(10), direction(1) {
   texture->loadFromFile("./Sprites/1163.png");
   sprite->setTexture(*texture);
   sprite->setPosition(PosX, PosY);
-  sprite->scale(0.25f, 0.25f);
+  sprite->scale(0.2f, 0.2f);
+}
+
+Enemy::~Enemy() {
+  delete this->sprite;
+  delete this->texture;
+  this->texture = nullptr;
+  this->sprite = nullptr;
 }
 
 void Enemy::move(sf::Time deltaTime) {
@@ -28,10 +35,9 @@ void Enemy::move(sf::Time deltaTime) {
     enemyMoveTime.restart();
   }
 
-  for(auto &bullet : bullets) {
+  for (auto &bullet : bullets) {
     bullet->update(deltaTime);
   }
-
 }
 
 bool Enemy::willReachEndOfScreen(sf::Time deltaTime) {
@@ -67,12 +73,10 @@ void Enemy::descent() {
 void Enemy::changeDirection() {
   for (auto &enemy : enemies) {
     enemy->direction *= -1;
-    }
   }
-
-
-void Enemy::update(sf::Time deltaTime) {
 }
+
+void Enemy::update(sf::Time deltaTime) {}
 
 void Enemy::initializeEnemies() {
   enemies.clear();
@@ -87,30 +91,29 @@ void Enemy::initializeEnemies() {
       enemies.push_back(enemy);
     }
   }
-
 }
-
-
 
 void Enemy::draw(sf::RenderWindow &window) { window.draw(*sprite); }
 
 void Enemy::shoot() {
-  for(auto &enemy : enemies) {
-    float randomChance = static_cast<float>(rand())/RAND_MAX;
+  for (auto &enemy : enemies) {
+    float randomChance = static_cast<float>(rand()) / RAND_MAX;
 
-    sf::Vector2f enemyPos; 
-    enemyPos.x = (enemy->sprite->getGlobalBounds().left + (enemy->sprite->getGlobalBounds().width / 2));
+    sf::Vector2f enemyPos;
+    enemyPos.x = (enemy->sprite->getGlobalBounds().left +
+                  (enemy->sprite->getGlobalBounds().width / 2));
     enemyPos.y = enemy->sprite->getGlobalBounds().top;
-    
-    if(randomChance < 0.002) {
+
+    if (randomChance < 0.0002) {
       Bullet *bullet = new Bullet(enemyPos, true);
       bullets.push_back(bullet);
     }
-    
   }
 
 } // Handles shooting
 
-void Enemy::die() {} // handles if enemy dies
+void Enemy::die() { std::cout << "Dead" << std::endl; } // handles if enemy dies
 
+int Enemy::getEnemyCount() { return enemies.size(); }
 
+sf::FloatRect Enemy::getDimensions() { return sprite->getGlobalBounds(); }

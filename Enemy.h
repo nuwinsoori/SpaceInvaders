@@ -2,18 +2,20 @@
 #define ENEMY_H
 #include "bullet.h"
 #include "entity.h"
+#include <SFML/Graphics/Rect.hpp>
 
 class Enemy : public Entity {
 protected:
   unsigned int pointValue;
-  std::vector<Enemy *> enemies;
   std::vector<Bullet *> bullets;
   float chanceToShoot;
   int direction;
   sf::Clock enemyMoveTime;
 
 public:
+  std::vector<Enemy *> enemies;
   Enemy();
+  ~Enemy();
   void drawAll(sf::RenderWindow &window);
   Enemy(float PosX, float PosY);
   void move(sf::Time deltaTime);
@@ -25,7 +27,8 @@ public:
   void draw(sf::RenderWindow &window) override;
   void shoot() override; // Handles shooting
   void die();
+  int getEnemyCount();
+  sf::FloatRect getDimensions();
 };
-
 
 #endif
