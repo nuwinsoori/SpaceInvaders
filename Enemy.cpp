@@ -67,10 +67,13 @@ void Enemy::descent() {
 void Enemy::changeDirection() {
   for (auto &enemy : enemies) {
     enemy->direction *= -1;
+    }
   }
+
+
+void Enemy::update(sf::Time deltaTime) {
 }
 
-void Enemy::update(sf::Time deltaTime) {}
 void Enemy::initializeEnemies() {
   enemies.clear();
 
@@ -87,22 +90,27 @@ void Enemy::initializeEnemies() {
 
 }
 
+
+
 void Enemy::draw(sf::RenderWindow &window) { window.draw(*sprite); }
 
 void Enemy::shoot() {
   for(auto &enemy : enemies) {
     float randomChance = static_cast<float>(rand())/RAND_MAX;
 
-    sf::Vector2f shootingPos; 
-    shootingPos.x = enemy->sprite->getPosition().x; 
-    shootingPos.y = enemy->sprite->getPosition().y;
-
+    sf::Vector2f enemyPos; 
+    enemyPos.x = (enemy->sprite->getGlobalBounds().left + (enemy->sprite->getGlobalBounds().width / 2));
+    enemyPos.y = enemy->sprite->getGlobalBounds().top;
+    
     if(randomChance < 0.002) {
-      Bullet *bullet = new Bullet(shootingPos, true);
+      Bullet *bullet = new Bullet(enemyPos, true);
       bullets.push_back(bullet);
     }
+    
   }
 
 } // Handles shooting
 
 void Enemy::die() {} // handles if enemy dies
+
+

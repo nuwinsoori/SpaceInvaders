@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Player.h"
+#include "SpecialEnemy.h"
 #include <SFML/Graphics.hpp>
 int main() {
   // rendering window
@@ -23,7 +24,7 @@ int main() {
     // drawing
     window.clear();
     player.draw(window);
-    enemy.drawAll(window);
+    enemy.draw(window);
     window.display();
   }
 
