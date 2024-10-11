@@ -3,6 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 
+const int WINDOW_WIDTH = 1200;  // Width in pixels
+const int WINDOW_HEIGHT = 800;   // Height in pixels
+
 const int FRAME_RATE = 120;
 const float STARTING_X = 600.0f;
 const float STARTING_Y = 715.0f;
@@ -21,5 +24,11 @@ const float ENEMYSPACINGY = 50.0f;
 const float ENEMY_SPEED = 1500.0f;
 const float ENEMY_DESEND_AMOUNT = 20.0f;
 const float ENEMY_MOVE_TIME = 0.5f;
+const float SE_SPEED = 6000.0f;
+
+//SPECAIL ENEMY VARS
+const float SE_STARTING_X = 50.0f;
+const float SE_STARTING_Y = 50.0f;
+const float SE_SCALE = 0.15;
 
 #endif
