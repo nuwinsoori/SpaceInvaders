@@ -1,13 +1,15 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "SpecialEnemy.h"
+#include "Global.h"
 #include <SFML/Graphics.hpp>
 int main() {
   // rendering window
-  sf::RenderWindow window(sf::VideoMode(1200, 800), "Space Invaders");
+  sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Space Invaders");
   window.setFramerateLimit(120);
   Player player;
   Enemy enemy;
+  SpecialEnemy specialenemy;
   sf::Clock clock;
 
   while (window.isOpen()) {
@@ -20,6 +22,7 @@ int main() {
     player.move(deltaTime);
     player.shoot();
     enemy.move(deltaTime);
+    specialenemy.move(deltaTime);
     player.collision(enemy);
     enemy.shoot();
     player.hit(enemy);
@@ -27,6 +30,7 @@ int main() {
     window.clear();
     player.draw(window);
     enemy.drawAll(window);
+    specialenemy.draw(window);
     window.display();
   }
 
