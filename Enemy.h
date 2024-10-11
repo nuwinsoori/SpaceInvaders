@@ -10,6 +10,8 @@ protected:
   float chanceToShoot;
   int direction;
   sf::Clock enemyMoveTime;
+  sf::IntRect frame1, frame2;
+  bool isFrame1;
 
 public:
   std::vector<Bullet *> bullets;
@@ -17,8 +19,9 @@ public:
   Enemy();
   ~Enemy();
   void drawAll(sf::RenderWindow &window);
-  Enemy(float PosX, float PosY);
+  Enemy(float PosX, float PosY, int position);
   void move(sf::Time deltaTime);
+  void switchFrame();
   void descent();
   void changeDirection();
   bool willReachEndOfScreen(sf::Time deltaTime);

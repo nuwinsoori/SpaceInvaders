@@ -13,13 +13,13 @@ const float SCREEN_WIDTH = 1200.0f;
 const float SCREEN_HEIGHT = 800.0f;
 const float ENEMY_LIMIT = 500.0f;
 const int ENEMYROW = 5;
-const int ENEMYCOL = 10;
+const int ENEMYCOL = 11;
 const float ENEMYSTARTX = 20.f;
 const float ENEMYSTARTY = 20.f;
 const float ENEMYSPACINGX = 50.0f;
 const float ENEMYSPACINGY = 50.0f;
-const float ENEMY_SPEED = 3000.0f;
-const float ENEMY_DESEND_AMOUNT = 50.0f;
+const float ENEMY_SPEED = 1500.0f;
+const float ENEMY_DESEND_AMOUNT = 20.0f;
 const float ENEMY_MOVE_TIME = 0.5f;
 
 #endif
