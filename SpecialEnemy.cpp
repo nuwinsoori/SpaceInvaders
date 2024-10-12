@@ -13,8 +13,20 @@ SpecialEnemy::SpecialEnemy() : SEdirection(1), pointVal(50) {
     sprite->setScale(SE_SCALE, SE_SCALE);
 }
 
-bool SpecialEnemy::HasReachedTarget(sf::Vector2f target) {
-    return (sprite->getPosition().x == target.x);
+// bool SpecialEnemy::HasReachedTarget(sf::Vector2f target) {
+//     return (sprite->getPosition().x == target.x);
+// }
+
+bool SpecialEnemy::HasReachedTarget(sf::Vector2f target, sf::RenderWindow &window) {
+
+    // Check if the sprite's x position has reached or passed the target.x position
+    if (SEdirection == 1) {
+        // Moving right: check if sprite has passed or reached target.x from the left
+        return (sprite->getPosition().x + sprite->getGlobalBounds().width <= 0);
+    } else {
+        // Moving left: check if sprite has passed or reached target.x from the right
+        return (sprite->getPosition().x >= window.getSize().x);
+    }
 }
 
 
@@ -33,14 +45,20 @@ void SpecialEnemy::move(sf::Time deltaTime, sf::RenderWindow &window) {
     // sf::Vector2f target; 
     // if (SEdirection == 1) {
     //     target.x = -sprite->getGlobalBounds().width;
+    //     target.y = sprite->getPosition().y;
     // } else if (SEdirection == -1) {
     //     target.x = window.getSize().x + sprite->getGlobalBounds().width;
+    //     target.y = sprite->getPosition().y;  
     // }
 
       if(lastMove >= ENEMY_MOVE_TIME) {
         // if (movingSE == true) {
         sprite->move(SE_SPEED * SEdirection * deltaTime.asSeconds(), 0.0f);
         SEMoveTime.restart();
+        
+        // if (chanceSEMoves < 0.002 && !HasReachedTarget(target, window)) {
+        //     sprite->move(SE_SPEED * SEdirection * deltaTime.asSeconds(), 0.0f);
+        //     SEMoveTime.restart();
         // }
         
 
@@ -57,13 +75,6 @@ void SpecialEnemy::move(sf::Time deltaTime, sf::RenderWindow &window) {
     //     SEMoveTime.restart();
     //     }
     // } 
-    
-    // if (sprite->getGlobalBounds().left + sprite->getGlobalBounds().width < 0) {
-    //     SEdirection = 1; 
-    // } else if (sprite->getGlobalBounds().left > window.getSize().x) {
-    //     SEdirection = -1; 
-    // }
-
  
 }
 
