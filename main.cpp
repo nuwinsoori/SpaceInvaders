@@ -30,7 +30,7 @@ int main() {
     // drawing
     window.clear();
     player.draw(window);
-    enemy.drawAll(window);
+    enemy.draw(window);
     specialenemy.draw(window);
     window.display();
   }
