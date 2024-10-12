@@ -8,7 +8,7 @@ SpecialEnemy::SpecialEnemy() : SEdirection(1), pointVal(50) {
     sprite = new sf::Sprite; 
     texture->loadFromFile("./Sprites/21-214046_space-invaders-ufo-shaped-sticker-space-invaders-sprites-png.png");
     sprite->setTexture(*texture);
-    sprite->setPosition(SE_STARTING_X, SE_STARTING_Y);
+    sprite->setPosition(-sprite->getGlobalBounds().width, SE_STARTING_Y);
     //-sprite.getGlobalBounds().width ----> replace x to have sprite off screen
     sprite->setScale(SE_SCALE, SE_SCALE);
 }
@@ -21,12 +21,12 @@ bool SpecialEnemy::HasReachedTarget(sf::Vector2f target) {
 // , sf::RenderWindow &window
 void SpecialEnemy::move(sf::Time deltaTime, sf::RenderWindow &window) {
     float lastMove = SEMoveTime.getElapsedTime().asSeconds();
-    float chanceSEMoves = static_cast<float>(rand())/RAND_MAX;
+    // float chanceSEMoves = static_cast<float>(rand())/RAND_MAX;
     // bool movingSE; 
 
     // if (chanceSEMoves < 0.002) {
     //     movingSE = true; 
-    // } else if (WINDOW_WIDTH + sprite->getGlobalBounds().width ) {
+    // } else { // if (WINDOW_WIDTH + sprite->getGlobalBounds().width) 
     //     movingSE = false; 
     // }
 
@@ -39,16 +39,17 @@ void SpecialEnemy::move(sf::Time deltaTime, sf::RenderWindow &window) {
 
       if(lastMove >= ENEMY_MOVE_TIME) {
         // if (movingSE == true) {
-        
         sprite->move(SE_SPEED * SEdirection * deltaTime.asSeconds(), 0.0f);
         SEMoveTime.restart();
         // }
+        
 
         if(sprite->getPosition().x >= window.getSize().x) {
             SEdirection = -1;
         } else if (sprite->getPosition().x + sprite->getGlobalBounds().width <= 0) {
             SEdirection = 1;
         }
+    
     } 
     // if(lastMove >= ENEMY_MOVE_TIME) {
     //     if (chanceSEMoves < 0.002 && !HasReachedTarget(target.x)) {
