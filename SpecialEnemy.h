@@ -16,7 +16,7 @@ class SpecialEnemy : public Enemy {
 
     public:
         SpecialEnemy();
-        void move(sf::Time deltaTime); //, sf::RenderWindow &window
+        void move(sf::Time deltaTime, sf::RenderWindow &window); //, sf::RenderWindow &window
         bool HasReachedTarget(sf::Vector2f target);
         bool checkIfOffScreen();
         void update(sf::Time deltaTime);

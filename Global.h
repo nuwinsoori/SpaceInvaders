@@ -29,6 +29,6 @@ const float SE_SPEED = 6000.0f;
 //SPECAIL ENEMY VARS
 const float SE_STARTING_X = 50.0f;
 const float SE_STARTING_Y = 50.0f;
-const float SE_SCALE = 0.15;
+const float SE_SCALE = 0.12;
 
 #endif

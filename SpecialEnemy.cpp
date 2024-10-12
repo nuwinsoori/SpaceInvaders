@@ -19,16 +19,16 @@ bool SpecialEnemy::HasReachedTarget(sf::Vector2f target) {
 
 
 // , sf::RenderWindow &window
-void SpecialEnemy::move(sf::Time deltaTime) {
+void SpecialEnemy::move(sf::Time deltaTime, sf::RenderWindow &window) {
     float lastMove = SEMoveTime.getElapsedTime().asSeconds();
     float chanceSEMoves = static_cast<float>(rand())/RAND_MAX;
-    bool movingSE; 
+    // bool movingSE; 
 
-    if (chanceSEMoves < 0.002) {
-        movingSE = true; 
-    } else if (WINDOW_WIDTH + sprite->getGlobalBounds().width ) {
-        movingSE = false; 
-    }
+    // if (chanceSEMoves < 0.002) {
+    //     movingSE = true; 
+    // } else if (WINDOW_WIDTH + sprite->getGlobalBounds().width ) {
+    //     movingSE = false; 
+    // }
 
     // sf::Vector2f target; 
     // if (SEdirection == 1) {
@@ -38,9 +38,16 @@ void SpecialEnemy::move(sf::Time deltaTime) {
     // }
 
       if(lastMove >= ENEMY_MOVE_TIME) {
-        if (movingSE == true) {
+        // if (movingSE == true) {
+        
         sprite->move(SE_SPEED * SEdirection * deltaTime.asSeconds(), 0.0f);
         SEMoveTime.restart();
+        // }
+
+        if(sprite->getPosition().x >= window.getSize().x) {
+            SEdirection = -1;
+        } else if (sprite->getPosition().x + sprite->getGlobalBounds().width <= 0) {
+            SEdirection = 1;
         }
     } 
     // if(lastMove >= ENEMY_MOVE_TIME) {

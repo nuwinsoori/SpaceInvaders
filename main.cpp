@@ -23,7 +23,7 @@ int main() {
     player.move(deltaTime);
     player.shoot();
     enemy.move(deltaTime);
-    specialenemy.move(deltaTime);
+    specialenemy.move(deltaTime, window);
     player.collision(enemy);
     enemy.shoot();
     player.hit(enemy);
