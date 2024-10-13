@@ -2,8 +2,11 @@
 #include "Enemy.h"
 #include "Global.h"
 #include "bullet.h"
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Clock.hpp>
 #include <iostream>
+#include <string>
 
 // Constructor
 Player::Player()
@@ -14,6 +17,23 @@ Player::Player()
   texture->loadFromFile("./Sprites/player.png");
   sprite->setTexture(*texture);
   sprite->setPosition(STARTING_X, STARTING_Y);
+
+  // showing score
+  font.loadFromFile("./pixelFont.ttf");
+
+  scoreText.setFont(font);
+  scoreText.setCharacterSize(24);           // Size in pixels
+  scoreText.setFillColor(sf::Color::White); // Color of the text
+  scoreText.setPosition(10, 10); // Position on the screen (top-left corner)
+  scoreText.setString("Score: " + std::to_string(score));
+
+  // showing lives
+  livesText.setFont(font);
+  livesText.setCharacterSize(24);           // Size in pixels
+  livesText.setFillColor(sf::Color::Green); // Color of the text
+  livesText.setPosition(1075,
+                        10); // Position on the screen (top-left corner)
+  livesText.setString("Lives: " + std::to_string(lives));
 }
 
 // Move method
@@ -67,21 +87,39 @@ void Player::deleteBullet(int index) {
 
 void Player::collision(Enemy &enemy) {
   for (int i = 0; i < bullets.size(); i++) {
-    Bullet *currentBullet = bullets.at(i); // Use the current bullet
-    for (int j = 0; j < enemy.getEnemyCount(); j++) {
-      Enemy *currentEnemy = enemy.enemies.at(j);
-      if (currentBullet && currentEnemy) { // ensure both are valid pointers
-        // Check for collision between the bullet and the current enemy
-        if (currentBullet->getDimensions().intersects(
-                currentEnemy->getDimensions())) {
-          currentEnemy->die();
-          deleteBullet(i);
-          i--;
-          break; // Exit the inner loop since the bullet is deleted
+    Bullet *currentBullet = bullets.at(i);
+    if (currentBullet) { // makes sure is a valid pointer
+
+      for (int j = 0; j < enemy.getEnemyCount(); j++) {
+        Enemy *currentEnemy = enemy.enemies.at(j);
+        if (currentEnemy) { // Ensure it's a valid pointer
+          // Check for collision between the bullet and the current enemy
+          if (currentBullet->getDimensions().intersects(
+                  currentEnemy->getDimensions())) {
+
+            // kill the hit enemy and update points
+            updateScore(currentEnemy->getPoints());
+            currentEnemy->die();
+
+            std::cout << score << std::endl;
+
+            // adjust index
+            enemy.enemies.erase(enemy.enemies.begin() + j);
+
+            // delete bullet and adjust index
+            deleteBullet(i);
+            i--;
+            break;
+          }
         }
       }
     }
   }
+}
+
+void Player::updateScore(int points) {
+  this->score += points;
+  scoreText.setString("Score: " + std::to_string(score)); // update score text
 }
 
 void Player::hit(Enemy &enemy) {
@@ -99,6 +137,7 @@ void Player::hit(Enemy &enemy) {
 // Losing life method
 void Player::loseLife() {
   lives -= 1;
+  livesText.setString("Lives: " + std::to_string(lives));
   if (isAlive()) {
     updateSprite();
   } else {
@@ -118,10 +157,13 @@ bool Player::isAlive() {
 void Player::updateSprite() {
   std::string newSprite;
   if (lives == 3) {
+    livesText.setFillColor(sf::Color::Green);
     newSprite = "./Sprites/player.png";
   } else if (lives == 2) {
+    livesText.setFillColor(sf::Color::Yellow);
     newSprite = "./Sprites/player(2livesleft).png";
   } else if (lives == 1) {
+    livesText.setFillColor(sf::Color::Red);
     newSprite = "./Sprites/player(1lifeleft).png";
   } else {
     std::cout << "ERROR: Should be dead" << std::endl;
@@ -139,4 +181,6 @@ void Player::draw(sf::RenderWindow &window) {
     bullet->draw(window);
   }
   window.draw(*sprite);
+  window.draw(scoreText);
+  window.draw(livesText);
 };

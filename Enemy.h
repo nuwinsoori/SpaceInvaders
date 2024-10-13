@@ -30,6 +30,7 @@ public:
   void draw(sf::RenderWindow &window) override;
   void shoot() override; // Handles shooting
   void die();
+  int getPoints();
   void deleteBullet(int index);
   void deleteOutOfBoundsBullets();
   int getEnemyCount();

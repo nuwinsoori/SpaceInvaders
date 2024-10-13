@@ -16,6 +16,9 @@ protected:
   bool triple;
   bool rapid;
   sf::Clock playerReloadTime;
+  sf::Font font;
+  sf::Text scoreText;
+  sf::Text livesText;
 
 public:
   Player(); // Constructor
@@ -33,6 +36,7 @@ public:
   void shoot() override;          // Handles shooting
   void deleteBullet(int index);   // deletes out of bounds bullets
   void collision(Enemy &enemy);   // bullet collision check
+  void updateScore(int points);
   void hit(Enemy &enemy);
   sf::Vector2f getMiddleTop();
   void draw(sf::RenderWindow &window) override;

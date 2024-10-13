@@ -30,7 +30,7 @@ int menu(sf::RenderWindow &window) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
       switch (menu.getPressedText()) {
       case 0:
-        return ENDGAME; // Start the game
+        return PLAYING; // Start the game
       case 1:
         return LEADERBOARD;
       }
