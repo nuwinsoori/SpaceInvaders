@@ -5,12 +5,15 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Window.hpp>
+#include <string>
 class Menu {
 private:
   const int TEXT_COUNT = 2;
   int selectedItemIndex;
   sf::Font font;
-  sf::Text text[2];
+  sf::Text text[4];
+  std::string previousScore;
+  std::string highScore;
 
 public:
   Menu();

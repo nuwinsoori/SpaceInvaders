@@ -11,6 +11,7 @@ protected:
   int lives;
   unsigned int playerSpeed;
   unsigned int score;
+  unsigned int highScore;
   float fireRate;
   bool shield;
   bool triple;

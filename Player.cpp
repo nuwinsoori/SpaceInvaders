@@ -5,6 +5,8 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Clock.hpp>
+#include <cstdio>
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -17,6 +19,25 @@ Player::Player()
   texture->loadFromFile("./Sprites/player.png");
   sprite->setTexture(*texture);
   sprite->setPosition(STARTING_X, STARTING_Y);
+
+  // loading highscore
+  std::ifstream file("scores.txt");
+  if (file.is_open()) {
+    std::string line;
+    int lineNumber = 0;
+
+    // Read lines until the second line is reached
+    while (std::getline(file, line)) {
+      lineNumber++;
+      if (lineNumber == 2) {
+        highScore = std::stoi(line); // Convert string to integer
+        break;
+      }
+    }
+    file.close();
+  } else {
+    std::cout << "Unable to open file!" << std::endl;
+  }
 
   // showing score
   font.loadFromFile("./pixelFont.ttf");
@@ -141,7 +162,23 @@ void Player::loseLife() {
   if (isAlive()) {
     updateSprite();
   } else {
-    // TODO: Add game over logic
+    // Read highscore from "scores.txt"
+    std::ifstream infile("scores.txt");
+    if (infile) {
+      int prev_score;
+      infile >> prev_score >> highScore;
+    }
+    infile.close();
+
+    // Update highscore if current_score is greater
+    if (score > highScore) {
+      highScore = score;
+    }
+
+    // Write current_score and highscore back to "scores.txt"
+    std::ofstream outfile("scores.txt");
+    outfile << score << "\n" << highScore << "\n";
+    outfile.close();
   }
 }
 
