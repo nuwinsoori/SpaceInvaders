@@ -2,7 +2,7 @@
 #include "Global.h"
 #include <iostream>
 
-Menu::Menu(float x, float y) {
+Menu::Menu() {
   if (!font.loadFromFile("./pixelFont.ttf")) {
     std::cout << "ERROR: Loading font" << std::endl;
   }

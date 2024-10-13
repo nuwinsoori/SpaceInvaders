@@ -13,7 +13,7 @@ private:
   sf::Text text[2];
 
 public:
-  Menu(float x, float y);
+  Menu();
   ~Menu();
   void draw(sf::RenderWindow &window);
   void moveUp();

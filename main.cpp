@@ -6,9 +6,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Event.hpp>
 
+enum state { MENU, PLAYING, LEADERBOARD, GAMEOVER, ENDGAME };
+
 int menu(sf::RenderWindow &window) {
   window.clear();
-  Menu menu(SCREEN_WIDTH, SCREEN_HEIGHT);
+  Menu menu;
 
   while (window.isOpen()) {
     sf::Event event;
@@ -28,10 +30,9 @@ int menu(sf::RenderWindow &window) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
       switch (menu.getPressedText()) {
       case 0:
-        return 0; // Start the game
+        return ENDGAME; // Start the game
       case 1:
-        std::cout << "Leaderboard" << std::endl;
-        break;
+        return LEADERBOARD;
       }
     }
 
@@ -43,6 +44,8 @@ int menu(sf::RenderWindow &window) {
 
   return -1; // Default return if window is closed
 }
+
+// TODO:: make return GAMEOVER when player dies to transition gameOver screen.
 void play(sf::RenderWindow &window) {
   window.clear();
   Player player;
@@ -82,12 +85,24 @@ int main() {
 
   int gameState = menu(window); // Start at the menu state
 
-  if (gameState == 0) {
-    play(window);
+  while (1) {
+    if (gameState == MENU) {
+      menu(window);
+    }
+    if (gameState == PLAYING) {
+      play(window);
+    }
+    if (gameState == LEADERBOARD) {
+      // leaderboard
+    }
+    if (gameState == GAMEOVER) {
+      // leaderboard
+    }
+    if (gameState == ENDGAME) {
+      break;
+      // leaderboard
+    }
   }
-  if (gameState == 1) {
-    // leaderboard
-  }
-
-  return 0;
+  // if left loop game is over
+  window.close();
 }
