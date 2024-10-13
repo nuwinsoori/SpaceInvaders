@@ -183,7 +183,7 @@ void Player::loseLife() {
 }
 
 bool Player::isAlive() {
-  if (lives >= 0) {
+  if (lives > 0) {
     return true;
   } else {
     return false;
