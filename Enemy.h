@@ -2,6 +2,7 @@
 #define ENEMY_H
 #include "bullet.h"
 #include "entity.h"
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
 class Enemy : public Entity {

@@ -5,6 +5,8 @@
 #include "Global.h"
 #include "bullet.h"
 #include "entity.h"
+#include <SFML/Audio.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
 class Player : public Entity {
 protected:
@@ -20,6 +22,8 @@ protected:
   sf::Font font;
   sf::Text scoreText;
   sf::Text livesText;
+  sf::SoundBuffer shootBuffer, dieBuffer, shotEnemyBuffer;
+  sf::Sound shootSound, dieSound, shotEnemySound;
 
 public:
   Player(); // Constructor

@@ -2,6 +2,7 @@
 #include "Enemy.h"
 #include "Global.h"
 #include "bullet.h"
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Clock.hpp>
@@ -19,6 +20,21 @@ Player::Player()
   texture->loadFromFile("./Sprites/player.png");
   sprite->setTexture(*texture);
   sprite->setPosition(STARTING_X, STARTING_Y);
+
+  // load sounds
+  if (!dieBuffer.loadFromFile("./Sounds/explosion.wav")) {
+    std::cout << "ERROR: loading sound" << std::endl;
+  }
+  if (!shootBuffer.loadFromFile("./Sounds/shoot.wav")) {
+    std::cout << "ERROR: loading sound" << std::endl;
+  }
+  if (!shotEnemyBuffer.loadFromFile("./Sounds/invaderkilled.wav")) {
+    std::cout << "ERROR: loading sound" << std::endl;
+  }
+
+  dieSound.setBuffer(dieBuffer);
+  shootSound.setBuffer(shootBuffer);
+  shotEnemySound.setBuffer(shotEnemyBuffer);
 
   // loading highscore
   std::ifstream file("scores.txt");
@@ -95,6 +111,7 @@ void Player::shoot() {
       timeSinceShot >= PLAYER_FIRE_RATE) {
     Bullet *bullet = new Bullet(getMiddleTop(), false);
     bullets.push_back(bullet);
+    shootSound.play();
     playerReloadTime.restart();
   }
 }
@@ -123,6 +140,9 @@ void Player::collision(Enemy &enemy) {
             enemy.enemies.erase(enemy.enemies.begin() + j);
             delete currentEnemy;
 
+            // play sound
+            shotEnemySound.play();
+
             // delete bullet and adjust index
             deleteBullet(i);
             i--;
@@ -145,6 +165,7 @@ void Player::hit(Enemy &enemy) {
     if (currentBullet->getDimensions().intersects(getDimensions())) {
       loseLife();
       enemy.deleteBullet(i);
+      dieSound.play();
     } else {
       i++; // Only increment i if no deletion occurred
     }
