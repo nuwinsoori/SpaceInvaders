@@ -24,6 +24,7 @@ Enemy::Enemy(float PosX, float PosY, int position)
     pointValue = 10;
     break;
   }
+
   frame1 = sf::IntRect(0, 0, 13, 10);  // First frame (left side)
   frame2 = sf::IntRect(14, 0, 13, 10); // Second frame (right side)
   sprite->setTexture(*texture);
@@ -128,6 +129,7 @@ void Enemy::initializeEnemies() {
     }
   }
 }
+
 void Enemy::shoot() {
   for (auto &enemy : enemies) {
     float randomChance = static_cast<float>(rand()) / RAND_MAX;
