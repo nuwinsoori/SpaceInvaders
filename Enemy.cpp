@@ -146,14 +146,6 @@ void Enemy::shoot() {
   }
 }
 
-// handles if enemy dies
-// TODO:: Make animation and for enemy death
-void Enemy::die() {
-  auto it = std::find(enemies.begin(), enemies.end(), this);
-  enemies.erase(it);
-  delete this;
-}
-
 int Enemy::getPoints() { return this->pointValue; }
 
 int Enemy::getEnemyCount() { return enemies.size(); }

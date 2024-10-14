@@ -121,9 +121,7 @@ void Player::collision(Enemy &enemy) {
             // kill the hit enemy and update points
             updateScore(currentEnemy->getPoints());
             enemy.enemies.erase(enemy.enemies.begin() + j);
-
-            // TODO:: remove debugging
-            std::cout << score << std::endl;
+            delete currentEnemy;
 
             // delete bullet and adjust index
             deleteBullet(i);
