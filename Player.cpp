@@ -2,6 +2,7 @@
 #include "Enemy.h"
 #include "Global.h"
 #include "bullet.h"
+#include "SpecialEnemy.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Clock.hpp>
@@ -106,7 +107,7 @@ void Player::deleteBullet(int index) {
   }
 }
 
-void Player::collision(Enemy &enemy) {
+void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
   for (int i = 0; i < bullets.size(); i++) {
     Bullet *currentBullet = bullets.at(i);
     if (currentBullet) { // makes sure is a valid pointer
@@ -216,4 +217,5 @@ void Player::draw(sf::RenderWindow &window) {
   window.draw(*sprite);
   window.draw(scoreText);
   window.draw(livesText);
+  
 };

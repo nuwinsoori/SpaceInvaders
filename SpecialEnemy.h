@@ -16,9 +16,11 @@ class SpecialEnemy : public Enemy {
 
     public:
         SpecialEnemy();
+        ~SpecialEnemy();
         void move(sf::Time deltaTime, sf::RenderWindow &window); //, sf::RenderWindow &window
         bool HasReachedTarget(sf::Vector2f target, sf::RenderWindow &window);
         bool checkIfOffScreen();
+        int getSEPoints();
         void update(sf::Time deltaTime);
         void draw(sf::RenderWindow &window) override;
         void DropPowerUp();

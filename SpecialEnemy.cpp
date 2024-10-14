@@ -13,6 +13,14 @@ SpecialEnemy::SpecialEnemy() : SEdirection(1), pointVal(50) {
     sprite->setScale(SE_SCALE, SE_SCALE);
 }
 
+
+SpecialEnemy::~SpecialEnemy() {
+    delete this->sprite;
+    delete this->texture;
+    this->texture = nullptr;
+    this->sprite = nullptr;
+}
+
 // bool SpecialEnemy::HasReachedTarget(sf::Vector2f target) {
 //     return (sprite->getPosition().x == target.x);
 // }
@@ -90,6 +98,12 @@ bool SpecialEnemy::checkIfOffScreen() {
 void SpecialEnemy::draw(sf::RenderWindow &window) {
     window.draw(*sprite);
 }
+
+int SpecialEnemy::getSEPoints() {
+    return this->pointVal;
+}
+
+
 
 
 // void SpecialEnemy::DropPowerUp() {
