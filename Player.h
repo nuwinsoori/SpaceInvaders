@@ -19,6 +19,7 @@ protected:
   bool shield;
   bool triple;
   bool rapid;
+  int shootingStyle;
   sf::Clock playerReloadTime;
   sf::Font font;
   sf::Text scoreText;
@@ -45,7 +46,13 @@ public:
   void updateScore(int points);
   void hit(Enemy &enemy);
   sf::Vector2f getMiddleTop();
+  sf::Vector2f getLeftTop();
+  sf::Vector2f getRightTop();
   void draw(sf::RenderWindow &window) override;
+  void normalShoot();
+  void rapidFire();
+  void tripleShot();
+  void extraLife();
   bool getRapidActive();  // Checks if rapid fire is active
   void setShieldActive(); // Activates shield
   void setTripleActive(); // Activates triple shot

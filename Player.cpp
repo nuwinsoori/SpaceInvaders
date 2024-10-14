@@ -104,8 +104,37 @@ sf::Vector2f Player::getMiddleTop() {
   return center;
 }
 
+sf::Vector2f Player::getLeftTop() {
+  sf::Vector2f left; 
+  left.x = (sprite->getGlobalBounds().left); 
+  left.y = sprite->getGlobalBounds().top;
+  return left; 
+}
+
+sf::Vector2f Player::getRightTop() {
+  sf::Vector2f right;
+  right.x = (sprite->getGlobalBounds().left + sprite->getGlobalBounds().width);
+  right.y = sprite->getGlobalBounds().top;
+  return right; 
+}
+
 // Shooting method
 void Player::shoot() {
+  switch (shootingStyle) {
+    case 1:
+      normalShoot();
+      break;
+    case 2:
+      rapidFire();
+      break;
+    case 3:
+      tripleShot();
+      break;
+  }
+
+}
+
+void Player::normalShoot() {
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
@@ -115,6 +144,40 @@ void Player::shoot() {
     shootSound.play();
     playerReloadTime.restart();
   }
+}
+
+void Player::rapidFire() {
+  float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
+      timeSinceShot >= RAPID_FIRE_RATE) {
+    Bullet *bullet = new Bullet(getMiddleTop(), false);
+    bullets.push_back(bullet);
+    shootSound.play();
+    playerReloadTime.restart();
+  }
+
+}
+
+void Player::tripleShot() {
+    float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
+      timeSinceShot >= RAPID_FIRE_RATE) {
+    Bullet *middleBullet = new Bullet(getMiddleTop(), false);
+    Bullet *leftBullet = new Bullet(getLeftTop(), false);
+    Bullet *rightBullet = new Bullet(getRightTop(), false);
+    
+    bullets.push_back(middleBullet);
+    bullets.push_back(leftBullet);
+    bullets.push_back(rightBullet);
+
+    shootSound.play();
+    playerReloadTime.restart();
+  }
+}
+
+void Player::extraLife() {
+  lives++;
+  livesText.setString("Lives: " + std::to_string(lives));
 }
 
 void Player::deleteBullet(int index) {
