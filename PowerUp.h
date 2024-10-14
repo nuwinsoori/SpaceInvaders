@@ -4,29 +4,22 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-
 class PowerUp {
-    protected: 
-        sf::Sprite* sprite;
-        sf::Texture* texture; 
-        bool isPoweredUp; 
-        bool powerUpActivated; 
-        char name; 
-        int time; 
-        float speed; 
-        
+protected:
+  sf::Texture *texture;
+  sf::Sprite *sprite;
+  sf::IntRect healthPower, tripleShoot, rapidShoot;
+  enum power { HEALTH, TRIPLE, RAPID };
+  int rolledPowerup;
 
-    public:
-        PowerUp();
-        PowerUp(char classType, sf::Vector2f enemyPosition);
-        void hide();
-        void draw(sf::RenderWindow *window);
-        void update();
-        bool checkOutOfBounds(sf::RenderWindow *window);
-        ~PowerUp();
-        
-
+public:
+  PowerUp();
+  PowerUp(sf::Vector2f enemyPosition);
+  void hide();
+  void draw(sf::RenderWindow &window);
+  void move(sf::Time deltaTime, sf::RenderWindow &window);
+  bool inBounds(sf::RenderWindow *window);
+  ~PowerUp();
 };
-
 
 #endif

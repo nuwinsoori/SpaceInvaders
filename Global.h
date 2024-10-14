@@ -25,10 +25,14 @@ const float ENEMYSPACINGY = 50.0f;
 const float ENEMY_SPEED = 1500.0f;
 const float ENEMY_DESEND_AMOUNT = 20.0f;
 const float ENEMY_MOVE_TIME = 0.5f;
-const float SE_SPEED = 200.0f;
 
-// SPECAIL ENEMY VARS
+// SPECIAL ENEMY VARS
+const float SE_SPEED = 200.0f;
 const sf::Vector2f SE_STARTING_POS(-100.0f, 50.0f);
 const float SE_SCALE = 0.12;
+const float SE_SPAWN_CHANCE = 0.2;
+
+// POWERUPS VARIABLES
+const float POWERUP_SPEED = 50.0f;
 
 #endif

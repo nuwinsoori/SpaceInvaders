@@ -1,7 +1,6 @@
 #include "SpecialEnemy.h"
-#include "Enemy.h"
 #include "Global.h"
-#include "entity.h"
+#include "PowerUp.h"
 
 SpecialEnemy::SpecialEnemy() : pointVal(100), isActive(false) {
   texture = new sf::Texture;
@@ -35,7 +34,7 @@ SpecialEnemy::~SpecialEnemy() {
 
 void SpecialEnemy::spawn() {
   float spawnChance = static_cast<float>(rand()) / RAND_MAX;
-  if (!isActive && spawnChance < 0.002) {
+  if (!isActive && spawnChance < SE_SPAWN_CHANCE) {
     isActive = true;
     activeSound.setLoop(1);
     activeSound.play();
@@ -51,18 +50,30 @@ void SpecialEnemy::move(sf::Time deltaTime) {
 
 void SpecialEnemy::checkIfOffScreen() {
   if (sprite->getGlobalBounds().left >= SCREEN_WIDTH) {
-    die(0);
+    die();
   }
 }
 
-void SpecialEnemy::die(bool killed) {
+void SpecialEnemy::die() {
   sprite->setPosition(SE_STARTING_POS);
   isActive = false;
   activeSound.setLoop(0);
+}
 
-  if (killed) {
-    dieSound.play();
-  }
+void SpecialEnemy::die(std::vector<PowerUp *> &activePowerUps) {
+  dieSound.play();
+  DropPowerUp(activePowerUps);
+}
+
+void SpecialEnemy::DropPowerUp(std::vector<PowerUp *> &activePowerUps) {
+  PowerUp *newPowerUp = new PowerUp(dropLocation());
+  activePowerUps.push_back(newPowerUp);
+}
+
+sf::Vector2f SpecialEnemy::dropLocation() {
+  return sf::Vector2f(sprite->getGlobalBounds().left +
+                          sprite->getGlobalBounds().width / 2,
+                      sprite->getPosition().y);
 }
 
 void SpecialEnemy::draw(sf::RenderWindow &window) { window.draw(*sprite); }
