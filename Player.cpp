@@ -56,9 +56,9 @@ Player::Player()
     std::cout << "Unable to open file!" << std::endl;
   }
 
-  // showing score
   font.loadFromFile("./pixelFont.ttf");
 
+  // showing score
   scoreText.setFont(font);
   scoreText.setCharacterSize(24);           // Size in pixels
   scoreText.setFillColor(sf::Color::White); // Color of the text
@@ -130,7 +130,7 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
     if (currentBullet) { // makes sure is a valid pointer
       if (currentBullet->getDimensions().intersects(
               specialenemy.getDimensions())) {
-        std::cout << "Special Killed" << std::endl;
+        std::cout << "specialenemy killed" << std::endl;
       }
 
       for (int j = 0; j < enemy.getEnemyCount(); j++) {

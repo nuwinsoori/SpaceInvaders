@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Event.hpp>
 
-enum state { MENU, PLAYING, LEADERBOARD, GAMEOVER, ENDGAME };
+enum state { MENU, PLAYING, GAMEOVER, ENDGAME };
 int gameState = MENU;
 
 int menu(sf::RenderWindow &window) {
@@ -47,7 +47,7 @@ int menu(sf::RenderWindow &window) {
 }
 
 // TODO:: make return GAMEOVER when player dies to transition gameOver screen.
-void play(sf::RenderWindow &window) {
+int play(sf::RenderWindow &window) {
   window.clear();
   Player player;
   Enemy enemy;
@@ -65,7 +65,8 @@ void play(sf::RenderWindow &window) {
     player.move(deltaTime);
     player.shoot();
     enemy.move(deltaTime);
-    specialenemy.move(deltaTime, window);
+    specialenemy.spawn();
+    specialenemy.move(deltaTime);
     player.collision(enemy, specialenemy);
     enemy.shoot();
     player.hit(enemy);
@@ -76,44 +77,45 @@ void play(sf::RenderWindow &window) {
     enemy.draw(window);
     specialenemy.draw(window);
     window.display();
+
+    if (!player.isAlive()) {
+      return GAMEOVER;
+    }
   }
+  return GAMEOVER;
 }
 
-// void GameOver(sf::RenderWindow &window) {
-//   window.clear();
-//   sf::Text backButton;
-//   sf::Font font;
-//   if (!font.loadFromFile("./pixelFont.ttf")) {
-//     std::cout << "Failed to load font." << std::endl;
-//     gameState = ENDGAME;
-//     return;
-//   }
-//   backButton.setFont(font);
-//   backButton.setString("BACK");
-//   backButton.setFillColor(sf::Color::Red);
-//   backButton.setPosition(SCREEN_WIDTH / 2, 750);
-//
-//   while (window.isOpen()) {
-//     sf::Event event;
-//     while (window.pollEvent(event)) {
-//       if (event.type == sf::Event::Closed)
-//         window.close();
-//     }
-//
-//     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-//       gameState = MENU;
-//       return;
-//     }
-//
-//     // drawing
-//     window.clear();
-//     window.draw(backButton);
-//     window.display();
-//   }
-//
-//   gameState = ENDGAME; // Ensure the function returns a value
-//   return;
-// }
+int GameOver(sf::RenderWindow &window) {
+  window.clear();
+  sf::Text backButton;
+  sf::Font font;
+  if (!font.loadFromFile("./pixelFont.ttf")) {
+    std::cout << "Failed to load font." << std::endl;
+    return ENDGAME;
+  }
+  backButton.setFont(font);
+  backButton.setString("BACK");
+  backButton.setFillColor(sf::Color::Red);
+  backButton.setPosition(SCREEN_WIDTH / 2, 750);
+
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed)
+        window.close();
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+      return MENU;
+    }
+
+    // drawing
+    window.clear();
+    window.draw(backButton);
+    window.display();
+  }
+  return MENU;
+}
 
 int Leaderboard(sf::RenderWindow &window) {
   window.clear();
@@ -153,20 +155,22 @@ int main() {
 
   gameState = menu(window); // Start at the menu state
 
-  if (gameState == MENU) {
-    menu(window);
-  }
-  if (gameState == PLAYING) {
-    play(window);
-  }
-  if (gameState == LEADERBOARD) {
-    Leaderboard(window);
-  }
-  if (gameState == GAMEOVER) {
-    window.close();
-  }
-  if (gameState == ENDGAME) {
-    // leaderboard
+  while (window.isOpen()) {
+    if (gameState == MENU) {
+      gameState = menu(window);
+      continue;
+    }
+    if (gameState == PLAYING) {
+      gameState = play(window);
+      continue;
+    }
+    if (gameState == GAMEOVER) {
+      gameState = GameOver(window);
+      continue;
+    }
+    if (gameState == ENDGAME) {
+      // leaderboard
+    }
   }
   // if left loop game is over
   // window.close();
