@@ -3,14 +3,12 @@
 #include "PowerUp.h"
 
 SpecialEnemy::SpecialEnemy() : pointVal(100), isActive(false) {
-  texture = new sf::Texture;
-  sprite = new sf::Sprite;
-  texture->loadFromFile("./Sprites/"
-                        "21-214046_space-invaders-ufo-shaped-sticker-space-"
-                        "invaders-sprites-png.png");
-  sprite->setTexture(*texture);
-  sprite->setPosition(SE_STARTING_POS);
-  sprite->setScale(SE_SCALE, SE_SCALE);
+  texture.loadFromFile("./Sprites/"
+                       "21-214046_space-invaders-ufo-shaped-sticker-space-"
+                       "invaders-sprites-png.png");
+  sprite.setTexture(texture);
+  sprite.setPosition(SE_STARTING_POS);
+  sprite.setScale(SE_SCALE, SE_SCALE);
 
   // load sounds
   if (!dieBuffer.loadFromFile("./Sounds/invaderkilled.wav")) {
@@ -25,12 +23,7 @@ SpecialEnemy::SpecialEnemy() : pointVal(100), isActive(false) {
   activeSound.setLoop(1);
 }
 
-SpecialEnemy::~SpecialEnemy() {
-  delete this->sprite;
-  delete this->texture;
-  this->texture = nullptr;
-  this->sprite = nullptr;
-}
+SpecialEnemy::~SpecialEnemy() {}
 
 void SpecialEnemy::spawn() {
   float spawnChance = static_cast<float>(rand()) / RAND_MAX;
@@ -43,39 +36,48 @@ void SpecialEnemy::spawn() {
 
 void SpecialEnemy::move(sf::Time deltaTime) {
   if (isActive) {
-    sprite->move(SE_SPEED * deltaTime.asSeconds(), 0);
+    sprite.move(SE_SPEED * deltaTime.asSeconds(), 0);
     checkIfOffScreen();
   }
 }
 
 void SpecialEnemy::checkIfOffScreen() {
-  if (sprite->getGlobalBounds().left >= SCREEN_WIDTH) {
-    die();
+  if (sprite.getGlobalBounds().left >= SCREEN_WIDTH) {
+    die(0);
   }
 }
 
-void SpecialEnemy::die() {
-  sprite->setPosition(SE_STARTING_POS);
+// void SpecialEnemy::die() {
+//   sprite->setPosition(SE_STARTING_POS);
+//   isActive = false;
+//   activeSound.setLoop(0);
+// }
+
+PowerUp *SpecialEnemy::die(bool killed) {
   isActive = false;
   activeSound.setLoop(0);
+
+  if (killed) {
+    dieSound.play();
+    return DropPowerUp();
+  }
+  sprite.setPosition(SE_STARTING_POS);
+  return nullptr;
 }
 
-void SpecialEnemy::die(std::vector<PowerUp *> &activePowerUps) {
-  dieSound.play();
-  DropPowerUp(activePowerUps);
-}
-
-void SpecialEnemy::DropPowerUp(std::vector<PowerUp *> &activePowerUps) {
-  PowerUp *newPowerUp = new PowerUp(dropLocation());
-  activePowerUps.push_back(newPowerUp);
-}
+// TODO: CHANGE THIS
+PowerUp *SpecialEnemy::DropPowerUp() { return new PowerUp(dropLocation()); }
 
 sf::Vector2f SpecialEnemy::dropLocation() {
-  return sf::Vector2f(sprite->getGlobalBounds().left +
-                          sprite->getGlobalBounds().width / 2,
-                      sprite->getPosition().y);
+  float x = sprite.getPosition().x;
+  float y = sprite.getPosition().y;
+  return sf::Vector2f(x, y);
 }
 
-void SpecialEnemy::draw(sf::RenderWindow &window) { window.draw(*sprite); }
+// sf::Vector2f SpecialEnemy::dropLocation() { return sf::Vector2f(600.0f,
+// 0.0f); }
+
+void SpecialEnemy::draw(sf::RenderWindow &window) { window.draw(sprite); }
 
 int SpecialEnemy::getSEPoints() { return this->pointVal; }
+void SpecialEnemy::goStart() { sprite.setPosition(SE_STARTING_POS); }

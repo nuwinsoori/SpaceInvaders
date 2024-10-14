@@ -15,7 +15,8 @@
 // Constructor
 Player::Player()
     : lives(3), playerSpeed(PLAYER_SPEED), score(0), fireRate(PLAYER_FIRE_RATE),
-      shield(false), triple(false), rapid(false) {
+      shield(false), triple(false), rapid(false),
+      shootingStyle(NORMAL_SHOOTING) {
   texture = new sf::Texture;
   sprite = new sf::Sprite;
   texture->loadFromFile("./Sprites/player.png");
@@ -74,6 +75,18 @@ Player::Player()
   livesText.setString("Lives: " + std::to_string(lives));
 }
 
+Player::~Player() {
+  for (auto &bullet : bullets) {
+    delete bullet;
+  }
+  bullets.clear();
+
+  for (PowerUp *powerup : powerUpList) {
+    delete powerup;
+  }
+  powerUpList.clear();
+}
+
 // Move method
 void Player::move(sf::Time deltaTime) {
   sf::FloatRect boundary = sprite->getGlobalBounds();
@@ -96,6 +109,48 @@ void Player::move(sf::Time deltaTime) {
   }
 }
 
+void Player::updatePowerUps(sf::Time deltaTime) {
+  for (size_t i = 0; i < powerUpList.size(); i++) {
+    PowerUp *powerUp = powerUpList[i];
+    powerUp->move(deltaTime);
+
+    // Check for collision with the player
+    if (getDimensions().intersects(powerUp->getDimensions())) {
+      collectPowerUp(powerUp->getType());
+      // delete from vector
+      delete powerUp;
+      powerUpList.erase(powerUpList.begin() + i);
+      i--;
+    }
+    // delete from vector if out of bounds
+    if (!powerUp->inBounds()) {
+      delete powerUp;
+      powerUpList.erase(powerUpList.begin() + i);
+      i--;
+    }
+  }
+}
+
+void Player::drawPowerUps(sf::RenderWindow &window) {
+  for (PowerUp *powerUp : powerUpList) {
+    window.draw(powerUp->getSprite());
+  }
+}
+
+void Player::collectPowerUp(int powerType) {
+  switch (powerType) {
+  case HEALTH:
+    extraLife();
+    break;
+  case TRIPLE:
+    shootingStyle = TRIPLE;
+    break;
+  case RAPID:
+    shootingStyle = RAPID_SHOOTING;
+    break;
+  }
+}
+
 sf::Vector2f Player::getMiddleTop() {
   sf::Vector2f center;
   center.x =
@@ -105,33 +160,32 @@ sf::Vector2f Player::getMiddleTop() {
 }
 
 sf::Vector2f Player::getLeftTop() {
-  sf::Vector2f left; 
-  left.x = (sprite->getGlobalBounds().left); 
+  sf::Vector2f left;
+  left.x = (sprite->getGlobalBounds().left);
   left.y = sprite->getGlobalBounds().top;
-  return left; 
+  return left;
 }
 
 sf::Vector2f Player::getRightTop() {
   sf::Vector2f right;
   right.x = (sprite->getGlobalBounds().left + sprite->getGlobalBounds().width);
   right.y = sprite->getGlobalBounds().top;
-  return right; 
+  return right;
 }
 
 // Shooting method
 void Player::shoot() {
   switch (shootingStyle) {
-    case 1:
-      normalShoot();
-      break;
-    case 2:
-      rapidFire();
-      break;
-    case 3:
-      tripleShot();
-      break;
+  case NORMAL_SHOOTING:
+    normalShoot();
+    break;
+  case TRIPLE_SHOOTING:
+    tripleShot();
+    break;
+  case RAPID_SHOOTING:
+    rapidFire();
+    break;
   }
-
 }
 
 void Player::normalShoot() {
@@ -155,17 +209,16 @@ void Player::rapidFire() {
     shootSound.play();
     playerReloadTime.restart();
   }
-
 }
 
 void Player::tripleShot() {
-    float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
+  float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
       timeSinceShot >= RAPID_FIRE_RATE) {
     Bullet *middleBullet = new Bullet(getMiddleTop(), false);
     Bullet *leftBullet = new Bullet(getLeftTop(), false);
     Bullet *rightBullet = new Bullet(getRightTop(), false);
-    
+
     bullets.push_back(middleBullet);
     bullets.push_back(leftBullet);
     bullets.push_back(rightBullet);
@@ -191,9 +244,15 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
   for (int i = 0; i < bullets.size(); i++) {
     Bullet *currentBullet = bullets.at(i);
     if (currentBullet) { // makes sure is a valid pointer
+
+      // collision with special enemy
       if (currentBullet->getDimensions().intersects(
               specialenemy.getDimensions())) {
-        specialenemy.die(1); // calls with true to play death sound
+        PowerUp *newPowerUp = specialenemy.die(true); // die() returns a PowerUp
+        specialenemy.goStart();                       // goes out of view
+        if (newPowerUp) {
+          powerUpList.push_back(newPowerUp); // Add to activePowerUps vector
+        }
         deleteBullet(i);
         i--;
         break;
@@ -202,6 +261,7 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
       for (int j = 0; j < enemy.getEnemyCount(); j++) {
         Enemy *currentEnemy = enemy.enemies.at(j);
         if (currentEnemy) { // Ensure it's a valid pointer
+
           // Check for collision between the bullet and the current enemy
           if (currentBullet->getDimensions().intersects(
                   currentEnemy->getDimensions())) {
@@ -281,7 +341,7 @@ bool Player::isAlive() {
 // Update sprite method
 void Player::updateSprite() {
   std::string newSprite;
-  if (lives == 3) {
+  if (lives >= 3) {
     livesText.setFillColor(sf::Color::Green);
     newSprite = "./Sprites/player.png";
   } else if (lives == 2) {

@@ -5,27 +5,36 @@
 #include <ctime>
 #include <iostream>
 
-PowerUp::PowerUp() {
+// PowerUp::PowerUp(sf::Vector2f enemyPosition) {
+//   healthPower = sf::IntRect(0, 0, 15, 13);
+//   tripleShoot = sf::IntRect(15, 0, 15, 13);
+//   rapidShoot = sf::IntRect(30, 0, 15, 13);
+//
+//   texture = new sf::Texture;
+//   sprite = new sf::Sprite;
+//
+//   if (!texture->loadFromFile("./Sprites/powerUps.png")) {
+//     std::cout << "ERROR: loading sprite (powerups)" << std::endl;
+//   }
+//   sprite->setTexture(*texture);
+// }
+
+PowerUp::PowerUp(sf::Vector2f enemyPosition) {
   healthPower = sf::IntRect(0, 0, 15, 13);
   tripleShoot = sf::IntRect(15, 0, 15, 13);
   rapidShoot = sf::IntRect(30, 0, 15, 13);
 
-  texture = new sf::Texture;
-  sprite = new sf::Sprite;
-
-  if (!texture->loadFromFile("./Sprites/powerUps.png")) {
+  if (!texture.loadFromFile("./Sprites/powerUps.png")) {
     std::cout << "ERROR: loading sprite (powerups)" << std::endl;
   }
-  sprite->setTexture(*texture);
-}
-
-PowerUp::PowerUp(sf::Vector2f enemyPosition) {
+  sprite.setTexture(texture);
+  sprite.setScale(3.0f, 3.0f);
 
   // Initialize random seed based on current time
   std::srand(static_cast<unsigned>(std::time(0)));
 
   // set location as enemies
-  sprite->setPosition(enemyPosition);
+  sprite.setPosition(enemyPosition);
 
   // Generate a random number between 0 and 2 and cast it to the enum type
   power randomPower = static_cast<power>(std::rand() % 3);
@@ -33,15 +42,15 @@ PowerUp::PowerUp(sf::Vector2f enemyPosition) {
   // based on the random number chooses type of powerup
   switch (randomPower) {
   case HEALTH:
-    sprite->setTextureRect(healthPower);
+    sprite.setTextureRect(healthPower);
     rolledPowerup = HEALTH;
     break;
   case TRIPLE:
-    sprite->setTextureRect(tripleShoot);
+    sprite.setTextureRect(tripleShoot);
     rolledPowerup = TRIPLE;
     break;
   case RAPID:
-    sprite->setTextureRect(rapidShoot);
+    sprite.setTextureRect(rapidShoot);
     rolledPowerup = RAPID;
     break;
   }
@@ -49,23 +58,16 @@ PowerUp::PowerUp(sf::Vector2f enemyPosition) {
 
 void PowerUp::hide() {}
 
-void PowerUp::draw(sf::RenderWindow &window) { window.draw(*sprite); }
+void PowerUp::draw(sf::RenderWindow &window) { window.draw(sprite); }
 
-void PowerUp::move(sf::Time deltaTime, sf::RenderWindow &window) {
-  if (inBounds(&window)) {
-    sprite->move(0, POWERUP_SPEED * deltaTime.asSeconds());
-  } else {
-    delete this;
-  }
+void PowerUp::move(sf::Time deltaTime) {
+  sprite.move(0, POWERUP_SPEED * deltaTime.asSeconds());
 }
 
-bool PowerUp::inBounds(sf::RenderWindow *window) {
-  return (sprite->getGlobalBounds().top >= SCREEN_HEIGHT);
+bool PowerUp::inBounds() {
+  return (sprite.getGlobalBounds().top <= SCREEN_HEIGHT);
 }
 
-PowerUp::~PowerUp() {
-  delete this->sprite;
-  delete this->texture;
-  sprite = nullptr;
-  texture = nullptr;
-}
+int PowerUp::getType() { return rolledPowerup; }
+
+PowerUp::~PowerUp() {}

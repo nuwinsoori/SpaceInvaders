@@ -2,6 +2,7 @@
 #define SPECIALENEMY_H
 
 #include "Enemy.h"
+#include "Global.h"
 #include "PowerUp.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -10,8 +11,8 @@
 class SpecialEnemy : public Enemy {
 private:
   unsigned int pointVal;
-  sf::Sprite *sprite;
-  sf::Texture *texture;
+  sf::Sprite sprite;
+  sf::Texture texture;
   sf::Clock SEMoveTime;
   bool isActive;
   bool playSound;
@@ -28,11 +29,12 @@ public:
   void update(sf::Time deltaTime);
   void spawn();
   void draw(sf::RenderWindow &window) override;
-  void DropPowerUp(std::vector<PowerUp *> &activePowerUps);
-  void die();
-  void die(std::vector<PowerUp *> &activePowerUps);
-  sf::FloatRect getDimensions() { return sprite->getGlobalBounds(); }
+  PowerUp *DropPowerUp();
+  // void die();
+  PowerUp *die(bool killed);
+  sf::FloatRect getDimensions() { return sprite.getGlobalBounds(); }
   sf::Vector2f dropLocation();
+  void goStart();
 };
 
 #endif

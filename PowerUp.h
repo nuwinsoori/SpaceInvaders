@@ -6,20 +6,24 @@
 
 class PowerUp {
 protected:
-  sf::Texture *texture;
-  sf::Sprite *sprite;
+  sf::Texture texture;
+  sf::Sprite sprite;
   sf::IntRect healthPower, tripleShoot, rapidShoot;
-  enum power { HEALTH, TRIPLE, RAPID };
   int rolledPowerup;
 
 public:
-  PowerUp();
   PowerUp(sf::Vector2f enemyPosition);
+  ~PowerUp();
   void hide();
   void draw(sf::RenderWindow &window);
-  void move(sf::Time deltaTime, sf::RenderWindow &window);
-  bool inBounds(sf::RenderWindow *window);
-  ~PowerUp();
+  void move(sf::Time deltaTime);
+  bool inBounds();
+  sf::FloatRect getDimensions() { return sprite.getGlobalBounds(); }
+  int getType();
+  sf::Sprite getSprite() const { return sprite; }
+
+  // TODO: DELETE LATER
+  float getHeight() { return sprite.getPosition().y; }
 };
 
 #endif

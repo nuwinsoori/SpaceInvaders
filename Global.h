@@ -33,6 +33,7 @@ const float SE_SCALE = 0.12;
 const float SE_SPAWN_CHANCE = 0.2;
 
 // POWERUPS VARIABLES
-const float POWERUP_SPEED = 50.0f;
-
+const float POWERUP_SPEED = 500.0f;
+enum power { HEALTH, TRIPLE, RAPID };
+enum shootingStyle { NORMAL_SHOOTING, TRIPLE_SHOOTING, RAPID_SHOOTING };
 #endif

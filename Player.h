@@ -3,9 +3,9 @@
 
 #include "Enemy.h"
 #include "Global.h"
+#include "SpecialEnemy.h"
 #include "bullet.h"
 #include "entity.h"
-#include "SpecialEnemy.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 
@@ -25,10 +25,12 @@ protected:
   sf::Text scoreText;
   sf::Text livesText;
   sf::SoundBuffer shootBuffer, dieBuffer, shotEnemyBuffer;
+  std::vector<PowerUp *> powerUpList;
   sf::Sound shootSound, dieSound, shotEnemySound;
 
 public:
   Player(); // Constructor
+  ~Player();
   std::vector<Bullet *> bullets;
   void move(sf::Time deltaTime);  // Moves the player
   void setPlayerLives(int lives); // Sets player lives
@@ -42,7 +44,8 @@ public:
   bool getTripleActive();         // Checks if triple shot is active
   void shoot() override;          // Handles shooting
   void deleteBullet(int index);   // deletes out of bounds bullets
-  void collision(Enemy &enemy, SpecialEnemy &specialenemy);   // bullet collision check
+  void collision(Enemy &enemy,
+                 SpecialEnemy &specialenemy); // bullet collision check
   void updateScore(int points);
   void hit(Enemy &enemy);
   sf::Vector2f getMiddleTop();
@@ -58,6 +61,9 @@ public:
   void setTripleActive(); // Activates triple shot
   void setRapidActive();  // Activates rapid fire
   sf::FloatRect getDimensions() { return sprite->getGlobalBounds(); }
+  void updatePowerUps(sf::Time deltaTime);
+  void collectPowerUp(int powerType);
+  void drawPowerUps(sf::RenderWindow &window);
 };
 
 #endif
