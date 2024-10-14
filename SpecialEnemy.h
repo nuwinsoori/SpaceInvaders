@@ -13,19 +13,22 @@ private:
   sf::Texture *texture;
   sf::Clock SEMoveTime;
   bool isActive;
+  bool playSound;
+  sf::SoundBuffer dieBuffer, activeBuffer;
+  sf::Sound dieSound, activeSound;
 
 public:
   SpecialEnemy();
   ~SpecialEnemy();
   void move(sf::Time deltaTime);
   bool HasReachedTarget(sf::Vector2f target, sf::RenderWindow &window);
-  bool checkIfOffScreen();
+  void checkIfOffScreen();
   int getSEPoints();
   void update(sf::Time deltaTime);
   void spawn();
   void draw(sf::RenderWindow &window) override;
   void DropPowerUp();
-  void die();
+  void die(bool killed);
   sf::FloatRect getDimensions() { return sprite->getGlobalBounds(); }
 };
 

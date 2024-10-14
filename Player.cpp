@@ -130,7 +130,10 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
     if (currentBullet) { // makes sure is a valid pointer
       if (currentBullet->getDimensions().intersects(
               specialenemy.getDimensions())) {
-        std::cout << "specialenemy killed" << std::endl;
+        specialenemy.die(1); // calls with true to play death sound
+        deleteBullet(i);
+        i--;
+        break;
       }
 
       for (int j = 0; j < enemy.getEnemyCount(); j++) {
