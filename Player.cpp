@@ -1,8 +1,8 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Global.h"
-#include "bullet.h"
 #include "SpecialEnemy.h"
+#include "bullet.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -128,6 +128,10 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
   for (int i = 0; i < bullets.size(); i++) {
     Bullet *currentBullet = bullets.at(i);
     if (currentBullet) { // makes sure is a valid pointer
+      if (currentBullet->getDimensions().intersects(
+              specialenemy.getDimensions())) {
+        std::cout << "Special Killed" << std::endl;
+      }
 
       for (int j = 0; j < enemy.getEnemyCount(); j++) {
         Enemy *currentEnemy = enemy.enemies.at(j);
@@ -238,5 +242,4 @@ void Player::draw(sf::RenderWindow &window) {
   window.draw(*sprite);
   window.draw(scoreText);
   window.draw(livesText);
-  
 };
