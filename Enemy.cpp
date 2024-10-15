@@ -48,7 +48,7 @@ Enemy::~Enemy() {
 }
 
 // enemy move function that handles enemy movement
-void Enemy::move(sf::Time deltaTime, Enemy &enemy) {
+void Enemy::move(sf::Time deltaTime) {
   // varible that hold the time since enemy last moved
   float timeSinceMove = enemyMoveTime.getElapsedTime().asSeconds();
 

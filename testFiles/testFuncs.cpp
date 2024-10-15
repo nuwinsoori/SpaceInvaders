@@ -12,32 +12,12 @@
 #include "iostream"
 
 using namespace std;
-
-int main() {
-  int numPlayerPass = playerTests();
-  int numEnemyPass = enemyTests();
-
-  if (numPlayerPass == 3) {
-    cout << "SUCCESS: all player tests passed." << endl;
-  } else {
-    cout << numPlayerPass << "out of 3 player tests have passed." << endl;
-  }
-
-  if (numEnemyPass == 3) {
-    cout << "SUCCESS: all enemy tests passed.";
-  } else {
-    cout << numEnemyPass << "out of 3 enemy tests have passed." << endl;
-  }
-
-  return 0;
-}
-
 int playerTests() {
   int Ppassed = 0;
 
   // testing player initalisation
   // lives: 3, fireRate: 0.75, Shooting Style: Normalshooting
-  Player *player = new Player(3, 0.75, NORMAL_SHOOTING);
+  Player *player = new Player();
   if (player->getPlayerLives() == 3 && player->getFireRate() == 0.75 &&
       player->getsShootingStyle() == NORMAL_SHOOTING) {
     cout << "PASSED: player intialisation test" << endl;
@@ -88,7 +68,7 @@ int enemyTests() {
   // enemy movement test
   sf::Time deltaTime = sf::seconds(1.0f);
   sf::Vector2f initialPos = enemy->getEnemyPos();
-  enemy->move(deltaTime, enemy);
+  enemy->move(deltaTime);
   if (initialPos != enemy->getEnemyPos()) {
     cout << "PASSED: enemy movement test" << endl;
     Epassed++;
@@ -99,7 +79,7 @@ int enemyTests() {
   // inilising another enemy, calling constructor that calls inilise enemies
   Enemy *enemy1 = new Enemy();
   enemy1->clearEnemies();
-  enemy1->move(sf::seconds(1.0f), enemy);
+  enemy1->move(sf::seconds(1.0f));
   if (enemy1->getEnemyCount() > 0) {
     cout << "PASSED: enemy respawn test" << endl;
     Epassed++;

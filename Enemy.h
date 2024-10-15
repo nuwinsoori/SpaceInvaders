@@ -22,7 +22,7 @@ public:
   ~Enemy();
   void drawAll(sf::RenderWindow &window);
   Enemy(float PosX, float PosY, int position);
-  void move(sf::Time deltaTime, Enemy &enemy);
+  void move(sf::Time deltaTime);
   void switchFrame();
   void descent();
   void changeDirection();
