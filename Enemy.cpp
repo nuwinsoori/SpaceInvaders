@@ -145,6 +145,10 @@ void Enemy::initializeEnemies() {
   respawnedCount++;
 }
 
+int Enemy::getRespawnedCount() {
+  return respawnedCount;
+}
+
 void Enemy::shoot() {
   for (auto &enemy : enemies) {
     float randomChance = static_cast<float>(rand()) / RAND_MAX;

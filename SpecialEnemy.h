@@ -27,7 +27,7 @@ public:
   void checkIfOffScreen();
   int getSEPoints();
   void update(sf::Time deltaTime);
-  void spawn();
+  void spawn(Enemy &enemy);
   void draw(sf::RenderWindow &window) override;
   PowerUp *DropPowerUp();
   // void die();

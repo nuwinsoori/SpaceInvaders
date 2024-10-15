@@ -1,6 +1,7 @@
 #include "SpecialEnemy.h"
 #include "Global.h"
 #include "PowerUp.h"
+#include "Player.h"
 
 SpecialEnemy::SpecialEnemy() : pointVal(100), isActive(false) {
   texture.loadFromFile("./Sprites/"
@@ -25,9 +26,17 @@ SpecialEnemy::SpecialEnemy() : pointVal(100), isActive(false) {
 
 SpecialEnemy::~SpecialEnemy() {}
 
-void SpecialEnemy::spawn() {
+void SpecialEnemy::spawn(Enemy &enemy) {
   float spawnChance = static_cast<float>(rand()) / RAND_MAX;
-  if (!isActive && spawnChance < SE_SPAWN_CHANCE) {
+  float spawnFactor; 
+
+  if(enemy.getRespawnedCount() < 2) {
+    spawnFactor = SE_SPAWN_CHANCE;
+  } else {
+    spawnFactor = SE_SPAWN_HIGH;
+  }
+
+  if (!isActive && spawnChance < spawnFactor) {
     isActive = true;
     activeSound.setLoop(1);
     activeSound.play();

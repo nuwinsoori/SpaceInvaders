@@ -32,7 +32,6 @@ public:
   void draw(sf::RenderWindow &window) override;
   void shoot() override; // Handles shooting
   void die();
-  void setRespawnedCounter();
   int getRespawnedCount();
   int getPoints();
   void deleteBullet(int index);
