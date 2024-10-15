@@ -340,7 +340,6 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
           // Check for collision between the bullet and the current enemy
           if (currentBullet->getDimensions().intersects(
                   currentEnemy->getDimensions())) {
-
             // kill the hit enemy and update points
             updateScore(currentEnemy->getPoints());
             enemy.enemies.erase(enemy.enemies.begin() + j);

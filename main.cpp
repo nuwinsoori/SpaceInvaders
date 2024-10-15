@@ -80,6 +80,7 @@ int play(sf::RenderWindow &window) {
     player.collision(enemy, specialenemy);
     enemy.shoot();
     player.hit(enemy);
+    
 
     // drawing
     window.clear();

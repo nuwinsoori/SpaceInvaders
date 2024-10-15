@@ -87,6 +87,10 @@ int enemyTests() {
     cout << "FAILED: enemy respawn test" << endl;
   }
 
+  //testing enemy vector
+    enemy->initializeEnemies();
+    int initialEnemyCount = enemy->getEnemyCount();
+
   delete enemy;
   delete enemy1;
 
