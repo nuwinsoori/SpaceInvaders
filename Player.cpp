@@ -214,7 +214,7 @@ void Player::rapidFire() {
 void Player::tripleShot() {
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
-      timeSinceShot >= RAPID_FIRE_RATE) {
+      timeSinceShot >= TRIPLE_FIRE_RATE) {
     Bullet *middleBullet = new Bullet(getMiddleTop(), false);
     Bullet *leftBullet = new Bullet(getLeftTop(), false);
     Bullet *rightBullet = new Bullet(getRightTop(), false);
