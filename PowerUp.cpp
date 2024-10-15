@@ -19,7 +19,6 @@
 //   sprite->setTexture(*texture);
 // }
 
-
 PowerUp::PowerUp(sf::Vector2f enemyPosition) {
   healthPower = sf::IntRect(0, 0, 15, 13);
   tripleShoot = sf::IntRect(15, 0, 15, 13);
@@ -59,21 +58,21 @@ PowerUp::PowerUp(sf::Vector2f enemyPosition) {
 
 void PowerUp::hide() {}
 
-// draws powerups 
+// draws powerups
 void PowerUp::draw(sf::RenderWindow &window) { window.draw(sprite); }
 
-//allows powerups to move (decend)
+// allows powerups to move (decend)
 void PowerUp::move(sf::Time deltaTime) {
   sprite.move(0, POWERUP_SPEED * deltaTime.asSeconds());
 }
 
-//check if any part of powerup if in game window 
+// check if any part of powerup if in game window
 bool PowerUp::inBounds() {
   return (sprite.getGlobalBounds().top <= SCREEN_HEIGHT);
 }
 
-//returns rolled powerup
+// returns rolled powerup
 int PowerUp::getType() { return rolledPowerup; }
 
-//powerup destructor 
+// powerup destructor
 PowerUp::~PowerUp() {}

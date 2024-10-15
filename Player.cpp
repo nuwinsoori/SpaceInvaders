@@ -18,9 +18,17 @@ Player::Player()
       shootingStyle(NORMAL_SHOOTING) {
   texture = new sf::Texture;
   sprite = new sf::Sprite;
-  texture->loadFromFile("./Sprites/player.png");
+  if (texture->loadFromFile("./Sprites/player.png")) {
+    std::cout << "ERROR: loading sprite (player)" << std::endl;
+  }
   sprite->setTexture(*texture);
   sprite->setPosition(STARTING_X, STARTING_Y);
+
+  // if (!powerUpBarTexture.loadFromFile("./sprites/PowerupBar.png")) {
+  //   std::cout << "ERROR: loading sprite" << std::endl;
+  // }
+  // powerUpBar.setTexture(powerUpBarTexture);
+  // powerUpBar.setPosition(1000, 700);
 
   // load sounds for the player
   if (!dieBuffer.loadFromFile("./Sounds/explosion.wav")) {
@@ -36,6 +44,8 @@ Player::Player()
   dieSound.setBuffer(dieBuffer);
   shootSound.setBuffer(shootBuffer);
   shotEnemySound.setBuffer(shotEnemyBuffer);
+
+  // creates powerupbar
 
   // loads highscore
   std::ifstream file("scores.txt");
@@ -72,13 +82,6 @@ Player::Player()
   livesText.setPosition(1075,
                         10); // Position on the screen (top-left corner)
   livesText.setString("Lives: " + std::to_string(lives));
-}
-
-// parameterised constructor
-Player::Player(int lives, float FireRate, int shootingStyle) {
-  this->lives = lives;
-  this->fireRate = fireRate;
-  this->shootingStyle = shootingStyle;
 }
 
 // player destructor
@@ -136,6 +139,7 @@ void Player::updatePowerUps(sf::Time deltaTime) {
     // Check for collision with the player
     if (getDimensions().intersects(powerUp->getDimensions())) {
       collectPowerUp(powerUp->getType());
+
       // delete from vector
       delete powerUp;
       powerUpList.erase(powerUpList.begin() + i);
@@ -165,16 +169,24 @@ sf::Vector2f Player::getPlayerPos() { return sprite->getPosition(); }
 
 // switchcase for different instances of powerup
 void Player::collectPowerUp(int powerType) {
+  std::cout << "WORKING" << std::endl;
   switch (powerType) {
   case HEALTH:
     extraLife();
+    updateSprite();
     break;
   case TRIPLE:
-    shootingStyle = TRIPLE;
+    // start the poweruptime
+    powerUpTime.restart();
+    tripleShot();
     break;
   case RAPID:
-    shootingStyle = RAPID_SHOOTING;
+    // start the poweruptime
+    powerUpTime.restart();
+    rapidFire();
     break;
+  default:
+    std::cout << "ERROR: didn't get powerup" << std::endl;
   }
 }
 
@@ -190,7 +202,7 @@ sf::Vector2f Player::getMiddleTop() {
 // gets the left top of the player sprite
 sf::Vector2f Player::getLeftTop() {
   sf::Vector2f left;
-  left.x = (sprite->getGlobalBounds().left);
+  left.x = (sprite->getGlobalBounds().left + 10);
   left.y = sprite->getGlobalBounds().top;
   return left;
 }
@@ -198,7 +210,8 @@ sf::Vector2f Player::getLeftTop() {
 // gets the right top of the player sprite
 sf::Vector2f Player::getRightTop() {
   sf::Vector2f right;
-  right.x = (sprite->getGlobalBounds().left + sprite->getGlobalBounds().width);
+  right.x =
+      (sprite->getGlobalBounds().left + sprite->getGlobalBounds().width - 10);
   right.y = sprite->getGlobalBounds().top;
   return right;
 }
@@ -220,6 +233,8 @@ void Player::shoot() {
 
 // this is the players normal shooting method
 void Player::normalShoot() {
+  shootingStyle = NORMAL_SHOOTING;
+
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
@@ -233,6 +248,14 @@ void Player::normalShoot() {
 
 // this defines shooting with rapid fire on
 void Player::rapidFire() {
+  if (shootingStyle != RAPID_SHOOTING) {
+    shootingStyle = RAPID_SHOOTING;
+  }
+
+  // resets powerup once time passes
+  if (powerUpTime.getElapsedTime().asSeconds() >= POWERUP_TIMER) {
+    shootingStyle = NORMAL_SHOOTING;
+  }
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
@@ -246,6 +269,15 @@ void Player::rapidFire() {
 
 // this defines shooting with triple shot
 void Player::tripleShot() {
+  if (shootingStyle != TRIPLE_SHOOTING) {
+    shootingStyle = TRIPLE_SHOOTING;
+  }
+
+  // resets powerup once time passes
+  if (powerUpTime.getElapsedTime().asSeconds() >= POWERUP_TIMER) {
+    shootingStyle = NORMAL_SHOOTING;
+  }
+
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
@@ -404,7 +436,7 @@ void Player::updateSprite() {
   sprite->setTexture(*texture); // set texture to new sprite
 }
 
-// draws player, its bullets, and the score.
+// draws player, its bullets, score, powerupbar
 void Player::draw(sf::RenderWindow &window) {
   for (auto &bullet : bullets) {
     bullet->draw(window);
@@ -412,6 +444,10 @@ void Player::draw(sf::RenderWindow &window) {
   window.draw(*sprite);
   window.draw(scoreText);
   window.draw(livesText);
+
+  if (shootingStyle != NORMAL_SHOOTING) {
+    drawPowerUpBar(window);
+  }
 };
 
 // setter for lives
@@ -437,3 +473,25 @@ int Player::getsShootingStyle() {
 
 // returns size of bullet vector
 size_t Player::getBulletCount() { return bullets.size(); }
+
+void Player::drawPowerUpBar(sf::RenderWindow &window) {
+  float remainingTime =
+      (POWERUP_TIMER - powerUpTime.getElapsedTime().asSeconds());
+
+  float barWidth = (remainingTime / POWERUP_TIMER);
+  powerUpbar.setPosition(930, 775);
+  powerUpbar.setSize(sf::Vector2f(barWidth * 250, 20));
+  powerUpbar.setOutlineColor(sf::Color::White);
+  powerUpbar.setOutlineThickness(3);
+
+  // change colour based on remainingTime
+  if (remainingTime > POWERUP_TIMER * 0.5f) {
+    powerUpbar.setFillColor(sf::Color::Green);
+  } else if (remainingTime > POWERUP_TIMER * 0.2f) {
+    powerUpbar.setFillColor(sf::Color::Yellow);
+  } else {
+    powerUpbar.setFillColor(sf::Color::Red);
+  }
+
+  window.draw(powerUpbar);
+}

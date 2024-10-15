@@ -163,7 +163,7 @@ int Leaderboard(sf::RenderWindow &window) {
 }
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
+  sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT),
                           "Space Invaders");
   window.setFramerateLimit(120);
 
