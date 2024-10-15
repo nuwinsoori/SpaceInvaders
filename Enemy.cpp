@@ -3,16 +3,17 @@
 #include "Global.h"
 #include "Player.h"
 
-//copy constructor that calls initaliseEnemies and creates and instance of enemies 
+// copy constructor that calls initaliseEnemies and creates and instance of
+// enemies
 Enemy::Enemy() { initializeEnemies(); }
 
-//paramaterised constructor that defines values 
+// paramaterised constructor that defines values
 Enemy::Enemy(float PosX, float PosY, int position)
     : pointValue(10), direction(1) {
   texture = new sf::Texture;
   sprite = new sf::Sprite;
 
-  //switch case that handles the enemy sprite sheet 
+  // switch case that handles the enemy sprite sheet
   switch (position) {
   case 1:
     texture->loadFromFile("./Sprites/topEnemy.png");
@@ -28,18 +29,17 @@ Enemy::Enemy(float PosX, float PosY, int position)
     break;
   }
 
-
   frame1 = sf::IntRect(0, 0, 13, 10);  // First frame (left side)
   frame2 = sf::IntRect(14, 0, 13, 10); // Second frame (right side)
-  sprite->setTexture(*texture); //sets texture for sprites 
-  sprite->setPosition(PosX, PosY); // sets position of sprite 
-  
+  sprite->setTexture(*texture);        // sets texture for sprites
+  sprite->setPosition(PosX, PosY);     // sets position of sprite
+
   // set up frame
   sprite->scale(3.0f, 3.0f);
   sprite->setTextureRect(frame1);
 }
 
-//enemy destructor 
+// enemy destructor
 Enemy::~Enemy() {
   delete this->sprite;
   delete this->texture;
@@ -47,24 +47,26 @@ Enemy::~Enemy() {
   this->sprite = nullptr;
 }
 
-//enemy move function that handles enemy movement
-void Enemy::move(sf::Time deltaTime, Enemy& enemy) {
-  //varible that hold the time since enemy last moved 
+// enemy move function that handles enemy movement
+void Enemy::move(sf::Time deltaTime, Enemy &enemy) {
+  // varible that hold the time since enemy last moved
   float timeSinceMove = enemyMoveTime.getElapsedTime().asSeconds();
-  
-  if (timeSinceMove >= ENEMY_MOVE_TIME) {
-    //loop that handles enemies movement 
-    for(auto &enemy : enemies) {
-      ////var that gets bottom of the enemy sprite 
-      float enemyBottom = enemy->sprite->getGlobalBounds().top + enemy->sprite->getGlobalBounds().height;
 
-      //this if statement ensures that enemies dont move infinately 
-      if (willReachEndOfScreen(deltaTime) && enemyBottom == ENEMY_STOP_DESCENT) {
+  if (timeSinceMove >= ENEMY_MOVE_TIME) {
+    // loop that handles enemies movement
+    for (auto &enemy : enemies) {
+      ////var that gets bottom of the enemy sprite
+      float enemyBottom = enemy->sprite->getGlobalBounds().top +
+                          enemy->sprite->getGlobalBounds().height;
+
+      // this if statement ensures that enemies dont move infinately
+      if (willReachEndOfScreen(deltaTime) &&
+          enemyBottom == ENEMY_STOP_DESCENT) {
         changeDirection();
-      //this moves the enemies down and across 
+        // this moves the enemies down and across
       } else if (willReachEndOfScreen(deltaTime)) {
         descent();
-        changeDirection();  
+        changeDirection();
       }
     }
 
@@ -77,20 +79,20 @@ void Enemy::move(sf::Time deltaTime, Enemy& enemy) {
     enemyMoveTime.restart();
   }
 
-  //respawns enemies if they are killed 
-  if(enemies.empty()) {
+  // respawns enemies if they are killed
+  if (enemies.empty()) {
     initializeEnemies();
   }
 
-  //loops through and updates enemies bullets based on time that passed
+  // loops through and updates enemies bullets based on time that passed
   for (auto &bullet : bullets) {
     bullet->update(deltaTime);
   }
-  //calls function to delete bullets of screen 
+  // calls function to delete bullets of screen
   deleteOutOfBoundsBullets();
 }
 
-//handles enemies animation 
+// handles enemies animation
 void Enemy::switchFrame() {
   isFrame1 = !isFrame1; // Toggle the frame flag
   if (isFrame1) {
@@ -100,7 +102,7 @@ void Enemy::switchFrame() {
   }
 }
 
-//checks if enemies have reached edge of screen 
+// checks if enemies have reached edge of screen
 bool Enemy::willReachEndOfScreen(sf::Time deltaTime) {
   for (auto &enemy : enemies) {
     float next_x_right = enemy->sprite->getPosition().x +
@@ -115,7 +117,7 @@ bool Enemy::willReachEndOfScreen(sf::Time deltaTime) {
   return false;
 }
 
-//draws the enemies and there bullets in the game window 
+// draws the enemies and there bullets in the game window
 void Enemy::draw(sf::RenderWindow &window) {
   for (auto &enemy : enemies) {
     window.draw(*enemy->sprite);
@@ -125,7 +127,7 @@ void Enemy::draw(sf::RenderWindow &window) {
   }
 }
 
-//moves enemies down 
+// moves enemies down
 void Enemy::descent() {
   for (auto &enemy : enemies) {
     enemy->sprite->move(0, ENEMY_DESEND_AMOUNT);
@@ -133,14 +135,14 @@ void Enemy::descent() {
   enemyMoveTime.restart();
 }
 
-//changes the direction of enemies 
+// changes the direction of enemies
 void Enemy::changeDirection() {
   for (auto &enemy : enemies) {
     enemy->direction *= -1;
   }
 }
 
-//creates the columns and rows of enemies 
+// creates the columns and rows of enemies
 void Enemy::initializeEnemies() {
   enemies.clear();
   int map[5] = {1, 2, 2, 3,
@@ -160,53 +162,52 @@ void Enemy::initializeEnemies() {
     }
   }
 
-  //counts how many times enemies have spawned 
+  // counts how many times enemies have spawned
   respawnedCount++;
 }
 
-//get the amount of time enemies have spawned 
-int Enemy::getRespawnedCount() {
-  return respawnedCount;
-}
+// get the amount of time enemies have spawned
+int Enemy::getRespawnedCount() { return respawnedCount; }
 
-//handles enemy shoot logic 
+// handles enemy shoot logic
 void Enemy::shoot() {
   for (auto &enemy : enemies) {
     float randomChance = static_cast<float>(rand()) / RAND_MAX;
 
-    //defines enemy position 
+    // defines enemy position
     sf::Vector2f enemyPos;
     enemyPos.x = (enemy->sprite->getGlobalBounds().left +
                   (enemy->sprite->getGlobalBounds().width / 2));
     enemyPos.y = enemy->sprite->getGlobalBounds().top;
 
-    //handles the chance enemies shoot 
-    if (randomChance < 0.0002*respawnedCount) {
-      //dynamically allocates bullets 
+    // handles the chance enemies shoot
+    if (randomChance < 0.0002 * respawnedCount) {
+      // dynamically allocates bullets
       Bullet *bullet = new Bullet(enemyPos, true);
-      //adds bullets to bullet array
+      // adds bullets to bullet array
       bullets.push_back(bullet);
     }
   }
 }
 
-//get pointval of enemy m 
+// get pointval of enemy m
 int Enemy::getPoints() { return this->pointValue; }
 
-//returns the size of enemy array 
+// returns the size of enemy array
 int Enemy::getEnemyCount() { return enemies.size(); }
 
-void Enemy::clearEnemies(){
-  enemies.empty();
+void Enemy::clearEnemies() {
+  for (auto &enemy : enemies) {
+    delete enemy;
+  }
+  enemies.clear();
 }
 
-sf::Vector2f Enemy::getEnemyPos() {
-  sprite->getPosition();
-}
+sf::Vector2f Enemy::getEnemyPos() { return sprite->getPosition(); }
 
-//deletes bullets if off screen 
+// deletes bullets if off screen
 void Enemy::deleteOutOfBoundsBullets() {
-  for (int i = 0; i < bullets.size(); i++) {
+  for (size_t i = 0; i < bullets.size(); i++) {
     if (bullets.at(i)->offScreen()) {
       deleteBullet(i);
       i--;
@@ -214,7 +215,7 @@ void Enemy::deleteOutOfBoundsBullets() {
   }
 }
 
-//deletes bullents and erases them 
+// deletes bullents and erases them
 void Enemy::deleteBullet(int index) {
   if (index >= 0 && index < bullets.size()) {
     delete bullets.at(index);
@@ -222,5 +223,5 @@ void Enemy::deleteBullet(int index) {
   }
 }
 
-//returns sprite dimentions 
+// returns sprite dimentions
 sf::FloatRect Enemy::getDimensions() { return sprite->getGlobalBounds(); }
