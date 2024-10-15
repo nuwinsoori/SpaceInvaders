@@ -24,7 +24,9 @@ const float ENEMYSPACINGX = 80.0f;
 const float ENEMYSPACINGY = 50.0f;
 const float ENEMY_SPEED = 1500.0f;
 const float ENEMY_DESEND_AMOUNT = 20.0f;
-const float ENEMY_MOVE_TIME = 0.5f;
+const float ENEMY_MOVE_TIME = .1f;
+// 0.5f
+const float ENEMY_STOP_DESCENT = 500.0f;
 
 // SPECIAL ENEMY VARS
 const float SE_SPEED = 200.0f;

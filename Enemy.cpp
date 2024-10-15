@@ -41,13 +41,21 @@ Enemy::~Enemy() {
   this->sprite = nullptr;
 }
 
-void Enemy::move(sf::Time deltaTime) {
+void Enemy::move(sf::Time deltaTime, Enemy& enemy) {
   float timeSinceMove = enemyMoveTime.getElapsedTime().asSeconds();
+ 
   if (timeSinceMove >= ENEMY_MOVE_TIME) {
-    if (willReachEndOfScreen(deltaTime)) {
-      descent();
-      changeDirection();
+    
+    for(auto &enemy : enemies) {
+      float enemyBottom = enemy->sprite->getGlobalBounds().top + enemy->sprite->getGlobalBounds().height;
+      if (willReachEndOfScreen(deltaTime) && enemyBottom == ENEMY_STOP_DESCENT) {
+        changeDirection();
+      } else if (willReachEndOfScreen(deltaTime)) {
+        descent();
+        changeDirection();  
+      }
     }
+
     // moves each enemy
     for (auto &enemy : enemies) {
       enemy->sprite->move(

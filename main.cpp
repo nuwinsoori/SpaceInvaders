@@ -65,7 +65,7 @@ int play(sf::RenderWindow &window) {
     player.move(deltaTime);
     player.shoot();
     player.updatePowerUps(deltaTime);
-    enemy.move(deltaTime);
+    enemy.move(deltaTime, enemy);
     specialenemy.spawn();
     specialenemy.move(deltaTime);
     player.collision(enemy, specialenemy);
