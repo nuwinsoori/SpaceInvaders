@@ -190,11 +190,19 @@ void Enemy::shoot() {
   }
 }
 
-//get pointval of enemy  
+//get pointval of enemy m 
 int Enemy::getPoints() { return this->pointValue; }
 
 //returns the size of enemy array 
 int Enemy::getEnemyCount() { return enemies.size(); }
+
+void Enemy::clearEnemies(){
+  enemies.empty();
+}
+
+sf::Vector2f Enemy::getEnemyPos() {
+  sprite->getPosition();
+}
 
 //deletes bullets if off screen 
 void Enemy::deleteOutOfBoundsBullets() {

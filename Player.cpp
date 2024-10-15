@@ -14,9 +14,7 @@
 
 // Player Constructor
 Player::Player()
-    : lives(3100), playerSpeed(PLAYER_SPEED), score(0), fireRate(PLAYER_FIRE_RATE),
-      shield(false), triple(false), rapid(false),
-      shootingStyle(NORMAL_SHOOTING) {
+    : lives(3), playerSpeed(PLAYER_SPEED), score(0), fireRate(PLAYER_FIRE_RATE), shootingStyle(NORMAL_SHOOTING) {
   texture = new sf::Texture;
   sprite = new sf::Sprite;
   texture->loadFromFile("./Sprites/player.png");
@@ -74,6 +72,14 @@ Player::Player()
                         10); // Position on the screen (top-left corner)
   livesText.setString("Lives: " + std::to_string(lives));
 }
+
+//parameterised constructor 
+Player::Player(int lives, float FireRate, int shootingStyle) {
+  this->lives = lives;
+  this->fireRate = fireRate;
+  this->shootingStyle = shootingStyle;
+}
+
 
 //player destructor 
 Player::~Player() {
@@ -150,6 +156,16 @@ void Player::drawPowerUps(sf::RenderWindow &window) {
     window.draw(powerUp->getSprite());
   }
 }
+
+//set player x and y pos
+// void setPlayerPos(float x, float y) {
+//   sprite->setPosition(x, y);
+// }
+
+// //returns the player x and y pos
+// sf::Vector2f getPlayerPos() {
+//   return sprite->getPosition();
+// }
 
 //switchcase for different instances of powerup 
 void Player::collectPowerUp(int powerType) {
@@ -401,3 +417,36 @@ void Player::draw(sf::RenderWindow &window) {
   window.draw(scoreText);
   window.draw(livesText);
 };
+
+//setter for lives 
+void Player::setPlayerLives(int lives) {
+  this->lives = lives;
+}
+
+//returns player lives 
+int Player::getPlayerLives() {
+  return lives; 
+}
+
+//gets player fireRate 
+float Player::getFireRate() {
+  return fireRate;
+}
+
+//returns player shooting style 
+int Player::getsShootingStyle() {
+  if(shootingStyle == 1) {
+    return NORMAL_SHOOTING; 
+  } else if (shootingStyle == 2) {
+    return TRIPLE_SHOOTING;
+  } else if (shootingStyle == 3) {
+    return RAPID_SHOOTING; 
+  }
+  return 0;
+}
+
+//returns size of bullet vector
+size_t Player::getBulletCount() {
+  return bullets.size(); 
+}
+

@@ -34,6 +34,8 @@ public:
   void die();
   int getRespawnedCount();
   int getPoints();
+  void clearEnemies();
+  sf::Vector2f getEnemyPos();
   void deleteBullet(int index);
   void deleteOutOfBoundsBullets();
   int getEnemyCount();

@@ -16,9 +16,6 @@ protected:
   unsigned int score;
   unsigned int highScore;
   float fireRate;
-  bool shield;
-  bool triple;
-  bool rapid;
   int shootingStyle;
   sf::Clock playerReloadTime;
   sf::Font font;
@@ -30,17 +27,21 @@ protected:
 
 public:
   Player(); // Constructor
+  Player(int lives, float FireRate, int shootingStyle);
   ~Player();
   std::vector<Bullet *> bullets;
   void move(sf::Time deltaTime);  // Moves the player
   void setPlayerLives(int lives); // Sets player lives
   int getPlayerLives();           // Gets player lives
+  float getFireRate();
+  int getsShootingStyle();
+  void setPlayerPos(float x, float y);
+  sf::Vector2f getPlayerPos();
   void loseLife();                // Handles life loss
   void updateSprite();            // Updates the player's sprite
   bool isAlive();                 // Checks if the player is still alive
   void setSpeed(float newSpeed);  // Sets player's speed
   float getTop();                 // Gets player's top position
-  bool getShieldActive();         // Checks if shield is active
   bool getTripleActive();         // Checks if triple shot is active
   void shoot() override;          // Handles shooting
   void deleteBullet(int index);   // deletes out of bounds bullets
@@ -56,10 +57,7 @@ public:
   void rapidFire();
   void tripleShot();
   void extraLife();
-  bool getRapidActive();  // Checks if rapid fire is active
-  void setShieldActive(); // Activates shield
-  void setTripleActive(); // Activates triple shot
-  void setRapidActive();  // Activates rapid fire
+  size_t getBulletCount();
   sf::FloatRect getDimensions() { return sprite->getGlobalBounds(); }
   void updatePowerUps(sf::Time deltaTime);
   void collectPowerUp(int powerType);
