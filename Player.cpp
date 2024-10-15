@@ -318,6 +318,9 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
       // collision with special enemy
       if (currentBullet->getDimensions().intersects(
               specialenemy.getDimensions())) {
+
+        // increases score by 200
+        updateScore(200);
         PowerUp *newPowerUp = specialenemy.die(true); // die() returns a PowerUp
         specialenemy.goStart();                       // goes out of view
         if (newPowerUp) {

@@ -181,7 +181,7 @@ void Enemy::shoot() {
     enemyPos.y = enemy->sprite->getGlobalBounds().top;
 
     // handles the chance enemies shoot
-    if (randomChance < ENEMY_SHOOT_CHANCE * (respawnedCount * 3)) {
+    if (randomChance < ENEMY_SHOOT_CHANCE * respawnedCount) {
       // dynamically allocates bullets
       Bullet *bullet = new Bullet(enemyPos, true);
       // adds bullets to bullet array
