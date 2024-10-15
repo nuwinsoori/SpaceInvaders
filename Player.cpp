@@ -253,6 +253,7 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
         if (newPowerUp) {
           powerUpList.push_back(newPowerUp); // Add to activePowerUps vector
         }
+        updateScore(specialenemy.getSEPoints());
         deleteBullet(i);
         i--;
         break;
