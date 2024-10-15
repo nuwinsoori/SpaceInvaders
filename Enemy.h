@@ -10,6 +10,7 @@ protected:
   unsigned int pointValue;
   float chanceToShoot;
   int direction;
+  int respawnedCount; 
   sf::Clock enemyMoveTime;
   sf::IntRect frame1, frame2;
   bool isFrame1;
@@ -31,6 +32,8 @@ public:
   void draw(sf::RenderWindow &window) override;
   void shoot() override; // Handles shooting
   void die();
+  void setRespawnedCounter();
+  int getRespawnedCount();
   int getPoints();
   void deleteBullet(int index);
   void deleteOutOfBoundsBullets();

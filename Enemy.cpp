@@ -41,6 +41,7 @@ Enemy::~Enemy() {
   this->sprite = nullptr;
 }
 
+
 void Enemy::move(sf::Time deltaTime, Enemy& enemy) {
   float timeSinceMove = enemyMoveTime.getElapsedTime().asSeconds();
  
@@ -140,6 +141,8 @@ void Enemy::initializeEnemies() {
       enemies.push_back(enemy);
     }
   }
+
+  respawnedCount++;
 }
 
 void Enemy::shoot() {
@@ -151,7 +154,7 @@ void Enemy::shoot() {
                   (enemy->sprite->getGlobalBounds().width / 2));
     enemyPos.y = enemy->sprite->getGlobalBounds().top;
 
-    if (randomChance < 0.0002) {
+    if (randomChance < 0.0002*respawnedCount) {
       Bullet *bullet = new Bullet(enemyPos, true);
       bullets.push_back(bullet);
     }

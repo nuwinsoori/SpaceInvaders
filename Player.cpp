@@ -14,7 +14,7 @@
 
 // Constructor
 Player::Player()
-    : lives(3), playerSpeed(PLAYER_SPEED), score(0), fireRate(PLAYER_FIRE_RATE),
+    : lives(3100), playerSpeed(PLAYER_SPEED), score(0), fireRate(PLAYER_FIRE_RATE),
       shield(false), triple(false), rapid(false),
       shootingStyle(NORMAL_SHOOTING) {
   texture = new sf::Texture;
