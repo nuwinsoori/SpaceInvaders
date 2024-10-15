@@ -65,6 +65,10 @@ void Enemy::move(sf::Time deltaTime, Enemy& enemy) {
     enemyMoveTime.restart();
   }
 
+  if(enemies.empty()) {
+    initializeEnemies();
+  }
+
   for (auto &bullet : bullets) {
     bullet->update(deltaTime);
   }
