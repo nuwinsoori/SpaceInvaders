@@ -19,6 +19,7 @@ protected:
   float speed;
 
 public:
+  //pure virtual functions 
   virtual void shoot() = 0;
   virtual void draw(sf::RenderWindow &window) = 0;
 };

@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 
+//defines all out varibles 
+
 const int WINDOW_WIDTH = 1200; // Width in pixels
 const int WINDOW_HEIGHT = 800; // Height in pixels
 

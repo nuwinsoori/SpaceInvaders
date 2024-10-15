@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 
-// Constructor
+// Player Constructor
 Player::Player()
     : lives(3100), playerSpeed(PLAYER_SPEED), score(0), fireRate(PLAYER_FIRE_RATE),
       shield(false), triple(false), rapid(false),
@@ -23,7 +23,7 @@ Player::Player()
   sprite->setTexture(*texture);
   sprite->setPosition(STARTING_X, STARTING_Y);
 
-  // load sounds
+  // load sounds for the player 
   if (!dieBuffer.loadFromFile("./Sounds/explosion.wav")) {
     std::cout << "ERROR: loading sound" << std::endl;
   }
@@ -38,7 +38,7 @@ Player::Player()
   shootSound.setBuffer(shootBuffer);
   shotEnemySound.setBuffer(shotEnemyBuffer);
 
-  // loading highscore
+  // loads highscore
   std::ifstream file("scores.txt");
   if (file.is_open()) {
     std::string line;
@@ -75,12 +75,15 @@ Player::Player()
   livesText.setString("Lives: " + std::to_string(lives));
 }
 
+//player destructor 
 Player::~Player() {
+  //deletes players bullets 
   for (auto &bullet : bullets) {
     delete bullet;
   }
   bullets.clear();
 
+  //deletes powerups 
   for (PowerUp *powerup : powerUpList) {
     delete powerup;
   }
@@ -90,25 +93,35 @@ Player::~Player() {
 // Move method
 void Player::move(sf::Time deltaTime) {
   sf::FloatRect boundary = sprite->getGlobalBounds();
+
+  //moves player left if left arrow key pressed 
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+    //ensures player doesnt go off game window
     if (boundary.left > 0) {
       sprite->move(-(playerSpeed * deltaTime.asSeconds()), 0.0f);
     }
   }
+
+  //move player right if right arrow key pressed 
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+     //ensures player doesnt go off game window
     if (boundary.left + boundary.width < SCREEN_WIDTH) {
       sprite->move(playerSpeed * deltaTime.asSeconds(), 0.0f);
     }
   }
 
+  //undates players bullets 
   for (auto &bullet : bullets) {
     bullet->update(deltaTime);
   }
+
+  //deletes off screen plauyer bullets 
   if (!bullets.empty() && bullets.at(0)->offScreen()) {
     deleteBullet(0);
   }
 }
 
+//handles power ups in player 
 void Player::updatePowerUps(sf::Time deltaTime) {
   for (size_t i = 0; i < powerUpList.size(); i++) {
     PowerUp *powerUp = powerUpList[i];
@@ -131,12 +144,14 @@ void Player::updatePowerUps(sf::Time deltaTime) {
   }
 }
 
+//draws power ups in game window 
 void Player::drawPowerUps(sf::RenderWindow &window) {
   for (PowerUp *powerUp : powerUpList) {
     window.draw(powerUp->getSprite());
   }
 }
 
+//switchcase for different instances of powerup 
 void Player::collectPowerUp(int powerType) {
   switch (powerType) {
   case HEALTH:
@@ -151,6 +166,7 @@ void Player::collectPowerUp(int powerType) {
   }
 }
 
+//gets the middle top of the player sprite 
 sf::Vector2f Player::getMiddleTop() {
   sf::Vector2f center;
   center.x =
@@ -159,6 +175,7 @@ sf::Vector2f Player::getMiddleTop() {
   return center;
 }
 
+//gets the left top of the player sprite 
 sf::Vector2f Player::getLeftTop() {
   sf::Vector2f left;
   left.x = (sprite->getGlobalBounds().left);
@@ -166,6 +183,7 @@ sf::Vector2f Player::getLeftTop() {
   return left;
 }
 
+//gets the right top of the player sprite 
 sf::Vector2f Player::getRightTop() {
   sf::Vector2f right;
   right.x = (sprite->getGlobalBounds().left + sprite->getGlobalBounds().width);
@@ -173,7 +191,7 @@ sf::Vector2f Player::getRightTop() {
   return right;
 }
 
-// Shooting method
+// Shooting methods
 void Player::shoot() {
   switch (shootingStyle) {
   case NORMAL_SHOOTING:
@@ -188,6 +206,7 @@ void Player::shoot() {
   }
 }
 
+// this is the players normal shooting method 
 void Player::normalShoot() {
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
@@ -200,7 +219,9 @@ void Player::normalShoot() {
   }
 }
 
+//this defines shooting with rapid fire on 
 void Player::rapidFire() {
+  // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
       timeSinceShot >= RAPID_FIRE_RATE) {
@@ -211,7 +232,9 @@ void Player::rapidFire() {
   }
 }
 
+//this defines shooting with triple shot
 void Player::tripleShot() {
+  // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
       timeSinceShot >= TRIPLE_FIRE_RATE) {
@@ -228,11 +251,13 @@ void Player::tripleShot() {
   }
 }
 
+//defines extra life power up
 void Player::extraLife() {
   lives++;
   livesText.setString("Lives: " + std::to_string(lives));
 }
 
+//funtion that deltes player bullets 
 void Player::deleteBullet(int index) {
   if (index >= 0 && index < bullets.size()) {
     delete bullets.at(index);
@@ -240,6 +265,7 @@ void Player::deleteBullet(int index) {
   }
 }
 
+//checks if player bullets have collided with any enemies & special enemies 
 void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
   for (int i = 0; i < bullets.size(); i++) {
     Bullet *currentBullet = bullets.at(i);
@@ -259,6 +285,7 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
         break;
       }
 
+      //collision with enemy 
       for (int j = 0; j < enemy.getEnemyCount(); j++) {
         Enemy *currentEnemy = enemy.enemies.at(j);
         if (currentEnemy) { // Ensure it's a valid pointer
@@ -286,11 +313,13 @@ void Player::collision(Enemy &enemy, SpecialEnemy &specialenemy) {
   }
 }
 
+//updates the score 
 void Player::updateScore(int points) {
   this->score += points;
   scoreText.setString("Score: " + std::to_string(score)); // update score text
 }
 
+//checks if player has been hit with an enemies bullet 
 void Player::hit(Enemy &enemy) {
   for (int i = 0; i < enemy.bullets.size();) {
     Bullet *currentBullet = enemy.bullets.at(i);
@@ -331,6 +360,7 @@ void Player::loseLife() {
   }
 }
 
+//cjecks if player is still alive 
 bool Player::isAlive() {
   if (lives > 0) {
     return true;
@@ -362,6 +392,7 @@ void Player::updateSprite() {
   sprite->setTexture(*texture); // set texture to new sprite
 }
 
+//draws player, its bullets, and the score. 
 void Player::draw(sf::RenderWindow &window) {
   for (auto &bullet : bullets) {
     bullet->draw(window);

@@ -8,7 +8,6 @@ private:
   sf::Texture *texture;
   sf::Vector2f position;
   float velocity;
-
 public:
   Bullet(sf::Vector2f position, bool rotate);
   bool offScreen();

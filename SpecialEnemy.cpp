@@ -3,6 +3,7 @@
 #include "PowerUp.h"
 #include "Player.h"
 
+//special enemy constructor that defines SE values 
 SpecialEnemy::SpecialEnemy() : pointVal(100), isActive(false) {
   texture.loadFromFile("./Sprites/"
                        "21-214046_space-invaders-ufo-shaped-sticker-space-"
@@ -24,18 +25,22 @@ SpecialEnemy::SpecialEnemy() : pointVal(100), isActive(false) {
   activeSound.setLoop(1);
 }
 
+//special enemy destructor 
 SpecialEnemy::~SpecialEnemy() {}
 
+//spawns special enemy 
 void SpecialEnemy::spawn(Enemy &enemy) {
   float spawnChance = static_cast<float>(rand()) / RAND_MAX;
   float spawnFactor; 
 
+  //sets the SE spawn factor 
   if(enemy.getRespawnedCount() < 2) {
     spawnFactor = SE_SPAWN_CHANCE;
   } else {
     spawnFactor = SE_SPAWN_HIGH;
   }
 
+  //plays sound when enemy is active and sets active to true 
   if (!isActive && spawnChance < spawnFactor) {
     isActive = true;
     activeSound.setLoop(1);
@@ -43,6 +48,7 @@ void SpecialEnemy::spawn(Enemy &enemy) {
   }
 }
 
+//moves the special enemy 
 void SpecialEnemy::move(sf::Time deltaTime) {
   if (isActive) {
     sprite.move(SE_SPEED * deltaTime.asSeconds(), 0);
@@ -50,6 +56,7 @@ void SpecialEnemy::move(sf::Time deltaTime) {
   }
 }
 
+//checks if SE is off screen 
 void SpecialEnemy::checkIfOffScreen() {
   if (sprite.getGlobalBounds().left >= SCREEN_WIDTH) {
     die(0);
@@ -62,6 +69,7 @@ void SpecialEnemy::checkIfOffScreen() {
 //   activeSound.setLoop(0);
 // }
 
+//handles events that occur when SE if killed 
 PowerUp *SpecialEnemy::die(bool killed) {
   isActive = false;
   activeSound.setLoop(0);
@@ -86,7 +94,9 @@ sf::Vector2f SpecialEnemy::dropLocation() {
 // sf::Vector2f SpecialEnemy::dropLocation() { return sf::Vector2f(600.0f,
 // 0.0f); }
 
+// Draws special enemy 
 void SpecialEnemy::draw(sf::RenderWindow &window) { window.draw(sprite); }
 
+//gets the pooint values of special enemy 
 int SpecialEnemy::getSEPoints() { return this->pointVal; }
 void SpecialEnemy::goStart() { sprite.setPosition(SE_STARTING_POS); }
