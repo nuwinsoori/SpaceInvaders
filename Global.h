@@ -10,7 +10,7 @@ const int FRAME_RATE = 120;
 const float STARTING_X = 600.0f;
 const float STARTING_Y = 715.0f;
 const float PLAYER_SPEED = 300.0f;
-const float PLAYER_FIRE_RATE = 0.75;
+const float PLAYER_FIRE_RATE = 0.1;
 const float RAPID_FIRE_RATE = 0.3;
 const float BULLET_VELOCITY = -500.0f;
 const float SCREEN_WIDTH = 1200.0f;
@@ -24,8 +24,7 @@ const float ENEMYSPACINGX = 80.0f;
 const float ENEMYSPACINGY = 50.0f;
 const float ENEMY_SPEED = 1500.0f;
 const float ENEMY_DESEND_AMOUNT = 20.0f;
-const float ENEMY_MOVE_TIME = .1f;
-// 0.5f
+const float ENEMY_MOVE_TIME = 0.5f;
 const float ENEMY_STOP_DESCENT = 500.0f;
 
 // SPECIAL ENEMY VARS
