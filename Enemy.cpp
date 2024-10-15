@@ -27,6 +27,8 @@ Enemy::Enemy(float PosX, float PosY, int position)
     texture->loadFromFile("./Sprites/botEnemy.png");
     pointValue = 10;
     break;
+  default:
+    std::cout << "ERROR: invalid enemy sprite" << std::endl;
   }
 
   frame1 = sf::IntRect(0, 0, 13, 10);  // First frame (left side)

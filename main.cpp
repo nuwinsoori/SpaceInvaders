@@ -80,7 +80,6 @@ int play(sf::RenderWindow &window) {
     player.collision(enemy, specialenemy);
     enemy.shoot();
     player.hit(enemy);
-    
 
     // drawing
     window.clear();
@@ -164,6 +163,8 @@ int Leaderboard(sf::RenderWindow &window) {
 }
 
 int main() {
+  // seed rng
+  srand(static_cast<unsigned int>(time(NULL)));
   sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT),
                           "Space Invaders");
   window.setFramerateLimit(120);

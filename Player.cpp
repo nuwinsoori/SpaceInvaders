@@ -18,17 +18,9 @@ Player::Player()
       shootingStyle(NORMAL_SHOOTING) {
   texture = new sf::Texture;
   sprite = new sf::Sprite;
-  if (texture->loadFromFile("./Sprites/player.png")) {
-    std::cout << "ERROR: loading sprite (player)" << std::endl;
-  }
+  texture->loadFromFile("./Sprites/player.png");
   sprite->setTexture(*texture);
   sprite->setPosition(STARTING_X, STARTING_Y);
-
-  // if (!powerUpBarTexture.loadFromFile("./sprites/PowerupBar.png")) {
-  //   std::cout << "ERROR: loading sprite" << std::endl;
-  // }
-  // powerUpBar.setTexture(powerUpBarTexture);
-  // powerUpBar.setPosition(1000, 700);
 
   // load sounds for the player
   if (!dieBuffer.loadFromFile("./Sounds/explosion.wav")) {
@@ -44,8 +36,6 @@ Player::Player()
   dieSound.setBuffer(dieBuffer);
   shootSound.setBuffer(shootBuffer);
   shotEnemySound.setBuffer(shotEnemyBuffer);
-
-  // creates powerupbar
 
   // loads highscore
   std::ifstream file("scores.txt");
@@ -169,7 +159,6 @@ sf::Vector2f Player::getPlayerPos() { return sprite->getPosition(); }
 
 // switchcase for different instances of powerup
 void Player::collectPowerUp(int powerType) {
-  std::cout << "WORKING" << std::endl;
   switch (powerType) {
   case HEALTH:
     extraLife();
