@@ -58,6 +58,7 @@ int playerTests() {
   return Ppassed;
 }
 
+
 int enemyTests() {
   int Epassed = 0;
 
@@ -72,18 +73,29 @@ int enemyTests() {
     cout << "FAILED: enemy initialisation test" << endl;
   }
 
-  // enemy movement test
-  // sf::Time deltaTime = sf::seconds(3.0f);
-  sf::Vector2f initialPos = enemy->getEnemyPos();
-  enemy->move(sf::seconds(1.0f));
-  if (initialPos != enemy->getEnemyPos()) {
+  
+
+  Enemy *enemy1 = new Enemy();
+
+  sf::Vector2f initialPos = enemy1->getEnemiesyPos();
+
+  sf::Clock clock;
+
+  while (clock.getElapsedTime().asSeconds() < 2.0f) {
+  }
+
+  enemy1->move(sf::seconds(1.0f));
+
+  sf::Vector2f newPos = enemy1->getEnemiesyPos();
+
+  if (initialPos != newPos) {
     cout << "PASSED: enemy movement test" << endl;
     Epassed++;
   } else {
     cout << "FAILED: enemy movement test" << endl;
   }
 
-  Enemy *enemy1 = new Enemy();
+  
   // inilising another enemy, calling constructor that calls inilise enemies
   enemy1->clearEnemies();
   enemy1->move(sf::seconds(1.0f));
@@ -99,3 +111,4 @@ int enemyTests() {
 
   return Epassed;
 }
+

@@ -24,6 +24,7 @@ public:
   Enemy(float PosX, float PosY, int position);
   void move(sf::Time deltaTime);
   void switchFrame();
+  sf::Vector2f getEnemiesyPos();
   void descent();
   void changeDirection();
   bool willReachEndOfScreen(sf::Time deltaTime);

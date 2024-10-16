@@ -207,6 +207,13 @@ void Enemy::clearEnemies() {
 
 sf::Vector2f Enemy::getEnemyPos() { return sprite->getPosition(); }
 
+sf::Vector2f Enemy::getEnemiesyPos() {
+  for (auto &enemy : enemies) {
+    enemy->getEnemyPos();
+  }
+  return 0;
+}
+
 // deletes bullets if off screen
 void Enemy::deleteOutOfBoundsBullets() {
   for (size_t i = 0; i < bullets.size(); i++) {
