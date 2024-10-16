@@ -14,8 +14,8 @@
 
 using namespace std;
 int playerTests() {
+
   int Ppassed = 0;
-  
 
   // testing player initalisation
   // lives: 3, fireRate: 0.75, Shooting Style: Normalshooting
@@ -40,18 +40,20 @@ int playerTests() {
 
   // testing player shooting
   size_t initialBulletSize = player->getBulletCount();
-  player->normalShoot();
 
   sf::Clock clock;
-  sf::sleep(sf::seconds(5));
+  // does nothing to wait out reload time
+  while (clock.getElapsedTime().asSeconds() < 2.0f) {
+  }
+  player->normalShoot();
+
+  // Now check if the player has fired any bullets
   if (player->getBulletCount() > initialBulletSize) {
     cout << "PASSED: player shooting test" << endl;
     Ppassed++;
   } else {
     cout << "FAILED: player shooting test" << endl;
   }
-
-  delete player;
 
   return Ppassed;
 }
@@ -70,7 +72,6 @@ int enemyTests() {
     cout << "FAILED: enemy initialisation test" << endl;
   }
 
-  
   // enemy movement test
   // sf::Time deltaTime = sf::seconds(3.0f);
   sf::Vector2f initialPos = enemy->getEnemyPos();

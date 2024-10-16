@@ -1,13 +1,33 @@
-all: spaceInvaders.o
+# flags
+CC = g++
+CFLAGS = -Wall -std=c++11
+SFMLFLAGS = -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
-spaceInvaders.o: *
-	g++ -Wall -std=c++11 Player.cpp specialEnemy.cpp powerUp.cpp main.cpp Enemy.cpp bullet.cpp Menu.cpp  -o spaceInvaders.o  -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system; ./spaceInvaders.o
+# source files
+GAME_SRCS = Player.cpp specialEnemy.cpp powerUp.cpp main.cpp Enemy.cpp bullet.cpp Menu.cpp
+TEST_SRCS = ./testFiles/test.cpp ./testFiles/testFuncs.cpp Player.cpp Enemy.cpp SpecialEnemy.cpp Bullet.cpp PowerUp.cpp
 
+.PHONY: all
+all: game
+
+.PHONY: game
+game: spaceInvaders.o
+	./spaceInvaders.o
+
+spaceInvaders.o: $(GAME_SRCS)
+	$(CC) $(CFLAGS) $(GAME_SRCS) -o spaceInvaders.out $(SFMLFLAGS)
+
+.PHONY: test
+test: test.out
+	./test.out
+
+test.out: $(TEST_SRCS)
+	$(CC) $(CFLAGS) $(TEST_SRCS) -o test.out $(SFMLFLAGS)
+
+.PHONY: clean
 clean:
 	rm -f spaceInvaders.o
 
-test:
-	g++ -Wall -std=c++11 ./testFiles/test.cpp ./testFiles/testFuncs.cpp Player.cpp Enemy.cpp SpecialEnemy.cpp Bullet.cpp PowerUp.cpp -o test.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system; ./test.out
-
+.PHONY: testclean
 testclean:
 	rm -f test.out
