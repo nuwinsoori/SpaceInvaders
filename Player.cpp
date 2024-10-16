@@ -89,27 +89,41 @@ Player::~Player() {
   powerUpList.clear();
 }
 
-// Move method
-void Player::move(sf::Time deltaTime) {
+void Player::moveLeft(sf::Time deltaTime) {
   sf::FloatRect boundary = sprite->getGlobalBounds();
+  // ensures player doesnt go off game window
+  if (boundary.left > 0) {
+    sprite->move(-(playerSpeed * deltaTime.asSeconds()), 0.0f);
+  }
+}
+
+void Player::moveRight(sf::Time deltaTime) {
+  sf::FloatRect boundary = sprite->getGlobalBounds();
+  // ensures player doesnt go off game window
+  if (boundary.left + boundary.width < SCREEN_WIDTH) {
+    sprite->move(playerSpeed * deltaTime.asSeconds(), 0.0f);
+  }
+}
+
+// update method
+void Player::update(sf::Time deltaTime) {
 
   // moves player left if left arrow key pressed
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-    // ensures player doesnt go off game window
-    if (boundary.left > 0) {
-      sprite->move(-(playerSpeed * deltaTime.asSeconds()), 0.0f);
-    }
+    moveLeft(deltaTime);
   }
 
   // move player right if right arrow key pressed
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-    // ensures player doesnt go off game window
-    if (boundary.left + boundary.width < SCREEN_WIDTH) {
-      sprite->move(playerSpeed * deltaTime.asSeconds(), 0.0f);
-    }
+    moveRight(deltaTime);
   }
 
-  // undates players bullets
+  // handles shooting
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+    shoot();
+  }
+
+  // updates players bullets
   for (auto &bullet : bullets) {
     bullet->update(deltaTime);
   }
@@ -118,6 +132,9 @@ void Player::move(sf::Time deltaTime) {
   if (!bullets.empty() && bullets.at(0)->offScreen()) {
     deleteBullet(0);
   }
+
+  // update powerups
+  updatePowerUps(deltaTime);
 }
 
 // handles power ups in player
@@ -167,12 +184,12 @@ void Player::collectPowerUp(int powerType) {
   case TRIPLE:
     // start the poweruptime
     powerUpTime.restart();
-    tripleShot();
+    shootingStyle = TRIPLE_SHOOTING;
     break;
   case RAPID:
     // start the poweruptime
     powerUpTime.restart();
-    rapidFire();
+    shootingStyle = RAPID_SHOOTING;
     break;
   default:
     std::cout << "ERROR: didn't get powerup" << std::endl;
@@ -226,8 +243,7 @@ void Player::normalShoot() {
 
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
-      timeSinceShot >= PLAYER_FIRE_RATE) {
+  if (timeSinceShot >= PLAYER_FIRE_RATE) {
     Bullet *bullet = new Bullet(getMiddleTop(), false);
     bullets.push_back(bullet);
     shootSound.play();
@@ -247,8 +263,7 @@ void Player::rapidFire() {
   }
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
-      timeSinceShot >= RAPID_FIRE_RATE) {
+  if (timeSinceShot >= RAPID_FIRE_RATE) {
     Bullet *bullet = new Bullet(getMiddleTop(), false);
     bullets.push_back(bullet);
     shootSound.play();
@@ -269,8 +284,7 @@ void Player::tripleShot() {
 
   // get time since player last shot bullet
   float timeSinceShot = playerReloadTime.getElapsedTime().asSeconds();
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
-      timeSinceShot >= TRIPLE_FIRE_RATE) {
+  if (timeSinceShot >= TRIPLE_FIRE_RATE) {
     Bullet *middleBullet = new Bullet(getMiddleTop(), false);
     Bullet *leftBullet = new Bullet(getLeftTop(), false);
     Bullet *rightBullet = new Bullet(getRightTop(), false);
@@ -469,20 +483,22 @@ void Player::drawPowerUpBar(sf::RenderWindow &window) {
   float remainingTime =
       (POWERUP_TIMER - powerUpTime.getElapsedTime().asSeconds());
 
-  float barWidth = (remainingTime / POWERUP_TIMER);
-  powerUpbar.setPosition(930, 775);
-  powerUpbar.setSize(sf::Vector2f(barWidth * 250, 20));
-  powerUpbar.setOutlineColor(sf::Color::White);
-  powerUpbar.setOutlineThickness(3);
+  if (remainingTime >= 0) {
+    float barWidth = (remainingTime / POWERUP_TIMER);
+    powerUpbar.setPosition(930, 775);
+    powerUpbar.setSize(sf::Vector2f(barWidth * 250, 20));
+    powerUpbar.setOutlineColor(sf::Color::White);
+    powerUpbar.setOutlineThickness(3);
 
-  // change colour based on remainingTime
-  if (remainingTime > POWERUP_TIMER * 0.5f) {
-    powerUpbar.setFillColor(sf::Color::Green);
-  } else if (remainingTime > POWERUP_TIMER * 0.2f) {
-    powerUpbar.setFillColor(sf::Color::Yellow);
-  } else {
-    powerUpbar.setFillColor(sf::Color::Red);
+    // change colour based on remainingTime
+    if (remainingTime > POWERUP_TIMER * 0.5f) {
+      powerUpbar.setFillColor(sf::Color::Green);
+    } else if (remainingTime > POWERUP_TIMER * 0.2f) {
+      powerUpbar.setFillColor(sf::Color::Yellow);
+    } else {
+      powerUpbar.setFillColor(sf::Color::Red);
+    }
+
+    window.draw(powerUpbar);
   }
-
-  window.draw(powerUpbar);
 }

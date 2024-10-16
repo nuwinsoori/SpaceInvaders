@@ -33,7 +33,9 @@ public:
   Player(int lives, float FireRate, int shootingStyle);
   ~Player();
   std::vector<Bullet *> bullets;
-  void move(sf::Time deltaTime);  // Moves the player
+  void update(sf::Time deltaTime); // Moves the player
+  void moveLeft(sf::Time deltaTime);
+  void moveRight(sf::Time deltaTime);
   void setPlayerLives(int lives); // Sets player lives
   int getPlayerLives();           // Gets player lives
   float getFireRate();

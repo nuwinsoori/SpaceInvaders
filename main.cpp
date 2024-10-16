@@ -71,9 +71,7 @@ int play(sf::RenderWindow &window) {
 
     // where all the functions are called
     sf::Time deltaTime = clock.restart();
-    player.move(deltaTime);
-    player.shoot();
-    player.updatePowerUps(deltaTime);
+    player.update(deltaTime);
     enemy.move(deltaTime);
     specialenemy.spawn(enemy);
     specialenemy.move(deltaTime);
