@@ -10,10 +10,12 @@
 #include <SFML/Graphics/Rect.hpp>
 
 #include "iostream"
+#include <SFML/System.hpp>
 
 using namespace std;
 int playerTests() {
   int Ppassed = 0;
+  
 
   // testing player initalisation
   // lives: 3, fireRate: 0.75, Shooting Style: Normalshooting
@@ -28,7 +30,7 @@ int playerTests() {
 
   // testing player movement
   player->setPlayerPos(STARTING_X, STARTING_Y);
-  player->move(sf::seconds(1.0f));
+  player->moveLeft(sf::seconds(1.0f));
   if (player->getPlayerPos().x != STARTING_X) {
     cout << "PASSED: player movement test" << endl;
     Ppassed++;
@@ -38,7 +40,10 @@ int playerTests() {
 
   // testing player shooting
   size_t initialBulletSize = player->getBulletCount();
-  player->shoot();
+  player->normalShoot();
+
+  sf::Clock clock;
+  sf::sleep(sf::seconds(5));
   if (player->getBulletCount() > initialBulletSize) {
     cout << "PASSED: player shooting test" << endl;
     Ppassed++;
@@ -65,10 +70,11 @@ int enemyTests() {
     cout << "FAILED: enemy initialisation test" << endl;
   }
 
+  
   // enemy movement test
-  sf::Time deltaTime = sf::seconds(1.0f);
+  // sf::Time deltaTime = sf::seconds(3.0f);
   sf::Vector2f initialPos = enemy->getEnemyPos();
-  enemy->move(deltaTime);
+  enemy->move(sf::seconds(1.0f));
   if (initialPos != enemy->getEnemyPos()) {
     cout << "PASSED: enemy movement test" << endl;
     Epassed++;
@@ -76,8 +82,8 @@ int enemyTests() {
     cout << "FAILED: enemy movement test" << endl;
   }
 
-  // inilising another enemy, calling constructor that calls inilise enemies
   Enemy *enemy1 = new Enemy();
+  // inilising another enemy, calling constructor that calls inilise enemies
   enemy1->clearEnemies();
   enemy1->move(sf::seconds(1.0f));
   if (enemy1->getEnemyCount() > 0) {
@@ -86,10 +92,6 @@ int enemyTests() {
   } else {
     cout << "FAILED: enemy respawn test" << endl;
   }
-
-  //testing enemy vector
-    enemy->initializeEnemies();
-    int initialEnemyCount = enemy->getEnemyCount();
 
   delete enemy;
   delete enemy1;

@@ -20,13 +20,13 @@ int main() {
   if (numPlayerPass == 3) {
     cout << "SUCCESS: all player tests passed." << endl;
   } else {
-    cout << numPlayerPass << "out of 3 player tests have passed." << endl;
+    cout << numPlayerPass << " out of 3 player tests have passed." << endl;
   }
 
   if (numEnemyPass == 3) {
     cout << "SUCCESS: all enemy tests passed.";
   } else {
-    cout << numEnemyPass << "out of 3 enemy tests have passed." << endl;
+    cout << numEnemyPass << " out of 3 enemy tests have passed." << endl;
   }
 
   return 0;
