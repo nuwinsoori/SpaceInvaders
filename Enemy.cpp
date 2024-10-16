@@ -211,7 +211,6 @@ sf::Vector2f Enemy::getEnemiesyPos() {
   for (auto &enemy : enemies) {
     enemy->getEnemyPos();
   }
-  return 0;
 }
 
 // deletes bullets if off screen
