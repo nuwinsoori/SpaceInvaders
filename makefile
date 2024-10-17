@@ -12,7 +12,7 @@ all: game
 
 .PHONY: game
 game: spaceInvaders.o
-	./spaceInvaders.o
+	./spaceInvaders.out
 
 spaceInvaders.o: $(GAME_SRCS)
 	$(CC) $(CFLAGS) $(GAME_SRCS) -o spaceInvaders.out $(SFMLFLAGS)
